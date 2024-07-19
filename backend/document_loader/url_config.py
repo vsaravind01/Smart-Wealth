@@ -2,7 +2,7 @@ class NseUrlConfig:
     indices = ["NIFTY 50"]
 
     @staticmethod
-    def get_index_config(index):
+    def get_index_config(index: str):
         index_config = {
             "url": f"https://www.nseindia.com/api/equity-stockIndices?index={index}",
             "headers": {
