@@ -1,16 +1,16 @@
 from typing import Any, Optional
 
-from backend.models.documents import BaseTextDocument, DocumentMeta
+from backend.models.documents import BaseTextDocument, BaseDocumentMeta
 
 
-class WebsiteDocumentMeta(DocumentMeta):
+class WebsiteBaseDocumentMeta(BaseDocumentMeta):
     title: str
     description: Optional[str] = None
     referrer_source: Optional[str] = None
 
 
 class WebsiteDocument(BaseTextDocument):
-    document_meta: WebsiteDocumentMeta
+    document_meta: WebsiteBaseDocumentMeta
 
     def __init__(self, /, **data: Any):
         super().__init__(**data)
