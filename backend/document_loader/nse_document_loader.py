@@ -28,26 +28,26 @@ class NseIndexLoader(BaseDataLoader):
 
     def __init__(
         self,
-        source: str,
+        index: Optional[str] = "NIFTY 50",
         file_path: Optional[PathLike] = None,
         dataset: Optional[list[dict]] = None,
         tag_set: Optional[list] = None,
     ):
-        self.source = source
+        self.index = index
+        self.request_config = NseUrlConfig.get_index_config(index)
         self.file_path = file_path
         self.dataset = dataset
         super().__init__(tag_set)
 
         self.__initialize()
 
-    def __initialize(self, index: str = "NIFTY 50"):
+    def __initialize(self):
         if not self.dataset:
             if self.file_path:
                 with open(self.file_path, "r") as file:
                     self.dataset = json.load(file)
             else:
-                config = NseUrlConfig.get_index_config(index)
-                response = requests.get(**config)
+                response = requests.get(**self.request_config)
                 self.dataset = response.json()["data"]
 
         self._load_documents(self.dataset)
@@ -56,7 +56,7 @@ class NseIndexLoader(BaseDataLoader):
         for doc in dataset:
             if "meta" in doc:
                 metadata = NseIndexDocumentMeta(
-                    source=self.source,
+                    source=self.request_config["url"],
                     open=doc["open"],
                     day_high=doc["dayHigh"],
                     day_low=doc["dayLow"],
