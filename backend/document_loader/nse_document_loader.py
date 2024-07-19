@@ -1,11 +1,13 @@
 from __future__ import annotations
 
 import datetime
+import requests
 import json
 from os import PathLike
 from typing import Optional
 
 from backend.document_loader.base_document_loader import BaseDataLoader
+from backend.document_loader.url_config import NseUrlConfig
 from backend.models.documents import NseIndexDocument, NseIndexDocumentMeta
 
 
@@ -31,10 +33,6 @@ class NseIndexLoader(BaseDataLoader):
         dataset: Optional[list[dict]] = None,
         tag_set: Optional[list] = None,
     ):
-        if not file_path and not dataset:
-            raise RuntimeError("file_path or data required")
-        if file_path and dataset:
-            raise RuntimeError("Pass either file_path or data, not both")
         self.source = source
         self.file_path = file_path
         self.dataset = dataset
@@ -42,10 +40,16 @@ class NseIndexLoader(BaseDataLoader):
 
         self.__initialize()
 
-    def __initialize(self):
-        if self.file_path:
-            with open(self.file_path, "r") as file:
-                self.dataset = json.load(file)
+    def __initialize(self, index: str = "NIFTY 50"):
+        if not self.dataset:
+            if self.file_path:
+                with open(self.file_path, "r") as file:
+                    self.dataset = json.load(file)
+            else:
+                config = NseUrlConfig.get_index_config(index)
+                response = requests.get(**config)
+                self.dataset = response.json()["data"]
+
         self._load_documents(self.dataset)
 
     def _load_documents(self, dataset: list[dict]):
