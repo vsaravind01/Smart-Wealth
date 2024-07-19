@@ -8,9 +8,9 @@ from backend.document_loader.base_document_loader import BaseDataLoader
 
 from backend.models.documents import (
     WebsiteDocument,
-    WebsiteDocumentMeta,
+    WebsiteBaseDocumentMeta,
     FaqDocument,
-    FaqDocumentMeta,
+    FaqBaseDocumentMeta,
 )
 
 
@@ -18,10 +18,11 @@ class WebsiteDataLoader(BaseDataLoader):
     """Website DataLoader class. Used to parse web-scraped."""
 
     def __init__(self, file_path: PathLike, tag_set: Optional[list]):
-        self.documents: list[WebsiteDocument] = []
         self.faqs = []
         self.file_path = file_path
-        self.tags_set = set(tag_set)
+
+        super().__init__(tag_set)
+
         self._initialize()
 
     def _initialize(self):
@@ -35,15 +36,15 @@ class WebsiteDataLoader(BaseDataLoader):
 
     def _load_dataset(self, dataset: list[dict]):
         """load the documents from the json dataset"""
-        for d in dataset:
-            metadata = WebsiteDocumentMeta(
-                source=d["url"],
-                referred_source=d["crawl"]["referredUrl"],
-                title=d["metadata"]["title"],
-                description=d["metadata"]["description"],
+        for doc in dataset:
+            metadata = WebsiteBaseDocumentMeta(
+                source=doc["url"],
+                referred_source=doc["crawl"]["referredUrl"],
+                title=doc["metadata"]["title"],
+                description=doc["metadata"]["description"],
             )
             document = WebsiteDocument(
-                page_content=d["markdown"], document_meta=metadata
+                page_content=doc["markdown"], document_meta=metadata
             )
             self.documents.append(document)
 
@@ -54,7 +55,7 @@ class WebsiteDataLoader(BaseDataLoader):
                 for j in d["metadata"]["jsonLd"]:
                     if j["@type"] == "FAQPage":
                         for faq_meta in j["mainEntity"]:
-                            metadata = FaqDocumentMeta(
+                            metadata = FaqBaseDocumentMeta(
                                 title=d["metadata"]["title"],
                                 source=d["url"],
                                 referred_source=d["crawl"]["referredUrl"],

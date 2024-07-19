@@ -1,17 +1,17 @@
 import datetime
 
-from backend.models.documents.base_document import BaseDocument, DocumentMeta
+from backend.models.documents.base_document import BaseDocument, BaseDocumentMeta
 from backend.models.documents.website_document import (
     WebsiteDocument,
-    WebsiteDocumentMeta,
+    WebsiteBaseDocumentMeta,
 )
-from backend.models.documents.faq_document import FaqDocumentMeta, FaqDocument
+from backend.models.documents.faq_document import FaqBaseDocumentMeta, FaqDocument
 
 
 class TestDocument:
 
     def test_base_document(self, base_document_content):
-        metadata = DocumentMeta(
+        metadata = BaseDocumentMeta(
             source=base_document_content.source,
             date_created=base_document_content.date_created,
         )
@@ -24,7 +24,7 @@ class TestDocument:
         )
 
     def test_website_document(self, webpage_content):
-        metadata = WebsiteDocumentMeta(
+        metadata = WebsiteBaseDocumentMeta(
             title=webpage_content.title,
             source=webpage_content.source,
             referrer_source=webpage_content.referrer_source,
@@ -42,7 +42,7 @@ class TestDocument:
         )
 
     def test_faq_document(self, faq_content):
-        metadata = FaqDocumentMeta(
+        metadata = FaqBaseDocumentMeta(
             title=faq_content.title,
             source=faq_content.source,
             date_created=datetime.datetime.now(),

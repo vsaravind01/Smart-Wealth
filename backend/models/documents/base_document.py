@@ -1,14 +1,11 @@
 import json
-from enum import Enum
-from typing import Any, Optional
-from dataclasses import dataclass
+from typing import Any
 
-import pydantic.dataclasses
-from pydantic import BaseModel, validator, field_validator
+from pydantic import BaseModel
 from datetime import datetime
 
 
-class DocumentMeta(BaseModel):
+class BaseDocumentMeta(BaseModel):
     source: str
 
     tags: list = []
@@ -18,7 +15,7 @@ class DocumentMeta(BaseModel):
 
 
 class BaseDocument(BaseModel):
-    document_meta: DocumentMeta
+    document_meta: BaseDocumentMeta
 
     @property
     def document_type(self):
