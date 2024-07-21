@@ -49,6 +49,9 @@ class WebsiteDocumentLoader(BaseTextDocumentLoader[WebsiteDocument]):
             return not any(
                 [
                     url.endswith("articles"),
+                    url.endswith(
+                        "code-for-collection-of-dues-and-repossession-of-security"
+                    ),
                     url.startswith(
                         "https://www.bankofbaroda.in/personal-banking/offers"
                     ),
@@ -61,8 +64,6 @@ class WebsiteDocumentLoader(BaseTextDocumentLoader[WebsiteDocument]):
                     "weekly-wrap" in url,
                     "newsletter-fintalk" in url,
                     url == "https://www.bankofbaroda.in/",
-                    url
-                    == "https://www.bankofbaroda.in/customer-support/code-for-collection-of-dues-and-repossession-of-security",
                 ]
             )
 
@@ -98,7 +99,15 @@ class WebsiteDocumentLoader(BaseTextDocumentLoader[WebsiteDocument]):
                             )
                             self.faqs.append(document)
 
-    def split_documents(self, **kwargs):
+    def split_documents(
+        self,
+        max_size_threshold: Optional[int] = 20000,
+        min_size_threshold: Optional[int] = 25,
+        sub_split_threshold: Optional[int] = 1500,
+        **kwargs,
+    ):
+        """Split WebsiteDocuments"""
+
         def should_ignore(_document: WebsiteDocument):
             _size = len(_document.page_content.split(" "))
             conditions_to_ignore = [
@@ -107,8 +116,8 @@ class WebsiteDocumentLoader(BaseTextDocumentLoader[WebsiteDocument]):
                     "https://www.bankofbaroda.in/personal-banking/offers"
                 ),
                 _document.document_meta.source == "https://www.bankofbaroda.in/",
-                _size > 20000,
-                _size < 25,
+                _size > max_size_threshold,
+                _size < min_size_threshold,
             ]
             return any(conditions_to_ignore)
 
@@ -131,14 +140,18 @@ class WebsiteDocumentLoader(BaseTextDocumentLoader[WebsiteDocument]):
             size = len(document.page_content.split(" "))
             if should_ignore(document):
                 continue
-            elif size > 1024:
+            elif size > sub_split_threshold:
                 documents = markdown_splitter.split_text(document.page_content)
                 temp_documents = []
                 for temp_document in documents:
-                    if len(temp_document.page_content.split(" ")) < 25:
+                    if len(temp_document.page_content.split(" ")) < min_size_threshold:
                         continue
-                    elif len(temp_document.page_content.split(" ")) > 1600:
-                        char_splitter = RecursiveCharacterTextSplitter(chunk_size=1500)
+                    elif (
+                        len(temp_document.page_content.split(" ")) > sub_split_threshold
+                    ):
+                        char_splitter = RecursiveCharacterTextSplitter(
+                            chunk_size=sub_split_threshold
+                        )
                         ds = char_splitter.split_text(temp_document.page_content)
                         for d in ds:
                             temp_documents.append(
