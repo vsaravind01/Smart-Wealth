@@ -3,6 +3,7 @@ from typing import List, Any
 from pydantic import HttpUrl
 from backend.models.documents import BaseDocument, BaseDocumentMeta
 
+
 class ExpertDocumentMeta(BaseDocumentMeta):
     title: str
     source: str
@@ -14,6 +15,7 @@ class ExpertDocumentMeta(BaseDocumentMeta):
     type: str
     last_updated_time: datetime
     link: HttpUrl
+
 
 class ExpertDocument(BaseDocument):
     document_meta: ExpertDocumentMeta

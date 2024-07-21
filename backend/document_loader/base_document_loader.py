@@ -3,20 +3,26 @@ from __future__ import annotations
 import json
 from io import StringIO
 from os import PathLike
-from typing import Optional
+from typing import Any, Optional, TypeVar, Generator, Generic
 
-from backend.models.documents import BaseDocument
+from backend.models.documents import BaseDocument, BaseTextDocument
+from backend.vector_stores import AzureCosmosVectorStore
 from backend.models.documents.tags import tag_map
 
+T = TypeVar("T", bound=BaseDocument)
 
-class BaseDataLoader:
+
+class BaseDocumentLoader(Generic[T]):
     """Base DataLoader class"""
 
     def __init__(self, tag_set: Optional[list[str]] = None):
         self.tag_set: set[str] = set(tag_set) if tag_set else set()
-        self.documents: list[BaseDocument] = []
+        self.documents: list[T] = []
 
-    def iter_from_attrs(self, attrs: list[str] | str):
+    def split_documents(self, **kwargs) -> list[BaseDocument]:
+        raise NotImplementedError()
+
+    def iter_from_attrs(self, attrs: list[str] | str) -> Generator[Any]:
         """Get all values from the documents given the attributes.
         The sub attributes can be provided as a list and the attributes
         will be inferred in order.
@@ -37,34 +43,91 @@ class BaseDataLoader:
         if isinstance(attrs, str):
             attrs = [attrs]
         for document in self.documents:
-            _doc = document
-            for attr in attrs:
-                _doc = getattr(_doc, attr)
+            _doc = self.get_document_attrs(document, attrs)
             yield _doc
+
+    @staticmethod
+    def get_document_attrs(document: BaseDocument, attrs: list[str]) -> Any:
+        _doc = document
+        for attr in attrs:
+            _doc = getattr(_doc, attr)
+        return _doc
 
     @staticmethod
     def set_tags(
         documents: list[BaseDocument],
-        tag_fields: list[str] = None,
+        tag_fields: list[list[str]] = None,
         must_tags: Optional[list[str]] = None,
-    ):
+    ) -> None:
         """set tags of the document in place"""
         if not must_tags:
             must_tags = []
         if not tag_fields:
-            tag_fields = ["source"]
+            tag_fields = [["document_meta", "source"]]
         for document in documents:
             _tags = set()
             if must_tags:
                 _tags = set(must_tags)
             for key, tags in tag_map.items():
                 for tag in tags:
-                    if any(tag in getattr(document, field) for field in tag_fields):
+                    if any(
+                        tag in BaseDocumentLoader.get_document_attrs(document, attrs)
+                        for attrs in tag_fields
+                    ):
                         _tags.add(tag)
             document.document_meta.tags = list(_tags)
 
     @staticmethod
-    def save_dataset(content: str | StringIO, filepath: PathLike):
+    def save_dataset(content: str | StringIO, filepath: PathLike) -> None:
         """save the dataset to the given filepath"""
         with open(filepath, "w") as file:
             json.dump(content, file)
+
+    def _load_documents(self, dataset: list[dict]) -> None:
+        raise NotImplementedError()
+
+
+class BaseTextDocumentLoader(BaseDocumentLoader[T]):
+    def __init__(self, tag_set: Optional[list[str]] = None, **kwargs):
+        super().__init__(tag_set=tag_set)
+        self.documents: list[T] = []
+
+    def split_documents(self, **kwargs) -> list[BaseTextDocument]:
+        raise NotImplementedError()
+
+    def embed_upsert_to_vector_store(
+        self,
+        database_name: str,
+        container_name: str,
+        should_split: Optional[bool] = False,
+        max_token_limit: Optional[int] = float("inf"),
+        document_range: Optional[tuple[int, int]] = (0, float("inf")),
+        split_document_kwargs: Optional[dict] = None,
+    ) -> int:
+        if not split_document_kwargs:
+            split_document_kwargs = {}
+
+        vector_store = AzureCosmosVectorStore(
+            database_name=database_name, container_name=container_name
+        )
+        if should_split:
+            documents_to_upload = self.split_documents(**split_document_kwargs)
+        else:
+            documents_to_upload = self.documents
+        total_tokens = vector_store.embed_upsert_documents(
+            documents=documents_to_upload,
+            template_iter=self.iter_documents_from_template,
+            max_token_limit=max_token_limit,
+            document_range=document_range,
+        )
+        return total_tokens
+
+    @staticmethod
+    def iter_documents_from_template(
+        documents: list[BaseTextDocument],
+    ) -> Generator[tuple[str, BaseTextDocument]]:
+        for document in documents:
+            assert isinstance(
+                document, BaseTextDocument
+            ), "Invalid Document Type. Documents should be type BaseTextDocument"
+            yield document.format_document(), document
