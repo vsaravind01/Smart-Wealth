@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import List, Any
 from pydantic import HttpUrl
-from backend.models.documents import BaseDocument, BaseDocumentMeta
+from backend.models.documents import BaseTextDocument, BaseDocumentMeta
 
 
 class ExpertDocumentMeta(BaseDocumentMeta):
@@ -17,7 +17,7 @@ class ExpertDocumentMeta(BaseDocumentMeta):
     link: HttpUrl
 
 
-class ExpertDocument(BaseDocument):
+class ExpertDocument(BaseTextDocument):
     document_meta: ExpertDocumentMeta
 
     def __init__(self, /, **data: Any):
