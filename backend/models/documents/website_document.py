@@ -14,3 +14,6 @@ class WebsiteDocument(BaseTextDocument):
 
     def __init__(self, /, **data: Any):
         super().__init__(**data)
+
+    def format_document(self):
+        return self.page_content

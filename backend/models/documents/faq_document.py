@@ -6,7 +6,7 @@ from backend.models.documents import BaseDocument, BaseDocumentMeta
 class FaqBaseDocumentMeta(BaseDocumentMeta):
     title: str
 
-    referred_source: Optional[str] = None
+    referrer_source: Optional[str] = None
 
 
 class FaqDocument(BaseDocument):

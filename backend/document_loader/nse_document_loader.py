@@ -6,12 +6,12 @@ import json
 from os import PathLike
 from typing import Optional
 
-from backend.document_loader.base_document_loader import BaseDataLoader
+from backend.document_loader.base_document_loader import BaseDocumentLoader
 from backend.document_loader.url_config import NseUrlConfig
 from backend.models.documents import NseIndexDocument, NseIndexDocumentMeta
 
 
-class NseIndexLoader(BaseDataLoader):
+class NseIndexLoader(BaseDocumentLoader):
     """Document Loader for NSE Index API.
     The class expects either a json file_path or dataset as list of dictionaries.
 
