@@ -10,7 +10,6 @@ class NewsBaseDocumentMeta(BaseDocumentMeta):
     author_name: str
     company_name: str
     keywords: List[str]
-    link: HttpUrl
     headline: str
     news_sentiment: dict
     market_trend: str

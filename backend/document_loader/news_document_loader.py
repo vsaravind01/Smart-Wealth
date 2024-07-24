@@ -35,7 +35,6 @@ class NewsDocumentLoader(BaseTextDocumentLoader):
                 author_name=doc["author_name"],
                 company_name=doc["company_name"],
                 keywords=doc["keywords"],
-                link=doc["link"],
                 headline=doc["headline"],
                 news_sentiment=doc["news_sentiment"],
                 market_trend=doc["market_trend"],
