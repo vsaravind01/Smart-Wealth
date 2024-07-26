@@ -7,7 +7,6 @@ from typing import Any, Optional, TypeVar, Generator, Generic
 
 from backend.models.documents import BaseDocument, BaseTextDocument
 from backend.vector_stores import AzureCosmosVectorStore
-from backend.models.documents.tags import tag_map
 
 T = TypeVar("T", bound=BaseDocument)
 
@@ -15,8 +14,13 @@ T = TypeVar("T", bound=BaseDocument)
 class BaseDocumentLoader(Generic[T]):
     """Base DataLoader class"""
 
-    def __init__(self, tag_set: Optional[list[str]] = None):
+    def __init__(
+        self,
+        tag_set: Optional[list[str]] = None,
+        tag_map: Optional[dict[str, list[str]]] = None,
+    ):
         self.tag_set: set[str] = set(tag_set) if tag_set else set()
+        self.tag_map: dict[str, list[str]] = tag_map if tag_map else {}
         self.documents: list[T] = []
 
     def split_documents(self, **kwargs) -> list[BaseDocument]:
@@ -53,8 +57,8 @@ class BaseDocumentLoader(Generic[T]):
             _doc = getattr(_doc, attr)
         return _doc
 
-    @staticmethod
     def set_tags(
+        self,
         documents: list[BaseDocument],
         tag_fields: list[list[str]] = None,
         must_tags: Optional[list[str]] = None,
@@ -68,7 +72,7 @@ class BaseDocumentLoader(Generic[T]):
             _tags = set()
             if must_tags:
                 _tags = set(must_tags)
-            for key, tags in tag_map.items():
+            for key, tags in self.tag_map.items():
                 for tag in tags:
                     if any(
                         tag in BaseDocumentLoader.get_document_attrs(document, attrs)
@@ -77,9 +81,33 @@ class BaseDocumentLoader(Generic[T]):
                         _tags.add(tag)
             document.document_meta.tags = list(_tags)
 
+    def upsert_to_vector_store(
+        self,
+        database_name: str,
+        container_name: str,
+        log_interval: Optional[int] = 100,
+        document_range: Optional[tuple[int, int]] = (0, float("inf")),
+    ) -> None:
+        vector_store = AzureCosmosVectorStore(
+            database_name=database_name, container_name=container_name
+        )
+        documents_to_upload = self.documents
+
+        vector_store.upsert_documents(
+            documents_to_upload,
+            log_interval=log_interval,
+            document_range=document_range,
+        )
+
     @staticmethod
     def save_dataset(content: str | StringIO, filepath: PathLike) -> None:
         """save the dataset to the given filepath"""
+        with open(filepath, "w") as file:
+            json.dump(content, file)
+
+    def save_documents(self, filepath: PathLike) -> None:
+        """save the documents to the given filepath"""
+        content = [doc.to_json() for doc in self.documents]
         with open(filepath, "w") as file:
             json.dump(content, file)
 
@@ -88,8 +116,13 @@ class BaseDocumentLoader(Generic[T]):
 
 
 class BaseTextDocumentLoader(BaseDocumentLoader[T]):
-    def __init__(self, tag_set: Optional[list[str]] = None, **kwargs):
-        super().__init__(tag_set=tag_set)
+    def __init__(
+        self,
+        tag_set: Optional[list[str]] = None,
+        tag_map: Optional[dict[str, list[str]]] = None,
+        **kwargs,
+    ):
+        super().__init__(tag_set=tag_set, tag_map=tag_map)
         self.documents: list[T] = []
 
     def split_documents(self, **kwargs) -> list[BaseTextDocument]:
