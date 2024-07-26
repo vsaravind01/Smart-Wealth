@@ -20,3 +20,11 @@ class NseUrlConfig:
             },
         }
         return index_config
+
+    @staticmethod
+    def get_yf_query_config(query: str):
+        return {
+            "url": "https://query2.finance.yahoo.com/v1/finance/search",
+            "headers": {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"},
+            "params": {"q": query, "quotes_count": 1},
+        }

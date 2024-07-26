@@ -11,7 +11,7 @@ from backend.models.documents import (
     FaqDocument,
     FaqBaseDocumentMeta,
 )
-from backend.models.documents.tags import tags
+from backend.models.documents.tags import web_tag_map
 
 from langchain_text_splitters import (
     MarkdownHeaderTextSplitter,
@@ -26,9 +26,10 @@ class WebsiteDocumentLoader(BaseTextDocumentLoader[WebsiteDocument]):
         self.faqs = []
         self.file_path = file_path
         if not tag_set:
-            tag_set = tags
+            tag_set = list(web_tag_map.keys())
+        tag_map = web_tag_map
 
-        super().__init__(tag_set)
+        super().__init__(tag_set=tag_set, tag_map=tag_map)
 
         self._initialize()
 

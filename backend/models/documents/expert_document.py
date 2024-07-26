@@ -1,20 +1,19 @@
 from datetime import datetime
 from typing import List, Any
-from pydantic import HttpUrl
 from backend.models.documents import BaseTextDocument, BaseDocumentMeta
 
 
 class ExpertDocumentMeta(BaseDocumentMeta):
     title: str
     source: str
-    time: datetime
-    author: str
-    content: str
+    date_published: datetime
     description: str
-    company: List[str]
-    type: str
-    last_updated_time: datetime
-    link: HttpUrl
+    summary: str
+    companies: List[str]
+    segments: List[str]
+    news_sentiment: dict[str, float]
+    market_trend: str
+    keywords: List[str]
 
 
 class ExpertDocument(BaseTextDocument):
@@ -22,3 +21,6 @@ class ExpertDocument(BaseTextDocument):
 
     def __init__(self, /, **data: Any):
         super().__init__(**data)
+
+    def format_document(self):
+        return self.page_content

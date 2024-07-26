@@ -5,14 +5,15 @@ from os import PathLike
 from typing import Optional
 
 from backend.document_loader.base_document_loader import BaseTextDocumentLoader
-from backend.models.documents.news_document import NewsDocument
-from backend.models.documents.news_document import NewsBaseDocumentMeta
+from backend.models.documents.news_document import NewsDocument, NewsDocumentMeta
 
 
-class NewsDocumentLoader(BaseTextDocumentLoader):
+class NewsDocumentLoader(BaseTextDocumentLoader[NewsDocument]):
     """News DataLoader class. Used to parse web-scraped."""
 
-    def __init__(self, file_path: PathLike, tag_set: Optional[list]):
+    def __init__(self, file_path: PathLike | str, tag_set: Optional[list] = None):
+        if not tag_set:
+            tag_set = []
         self.file_path = file_path
 
         super().__init__(tag_set)
@@ -30,20 +31,8 @@ class NewsDocumentLoader(BaseTextDocumentLoader):
         """load the documents from the json dataset"""
 
         for doc in dataset:
-            metadata = NewsBaseDocumentMeta(
-                id=doc["id"],
-                author_name=doc["author_name"],
-                company_name=doc["company_name"],
-                keywords=doc["keywords"],
-                headline=doc["headline"],
-                news_sentiment=doc["news_sentiment"],
-                market_trend=doc["market_trend"],
-                sector=doc["sector"],
-                summary=doc["summary"],
-                date_published=doc["date_published"],
-                source=doc["source"],
-                tags=doc["article_tags"],
-                is_ai_generated=True,
+            metadata = NewsDocumentMeta(
+                **doc["document_meta"],
             )
             document = NewsDocument(
                 page_content=doc["page_content"], document_meta=metadata

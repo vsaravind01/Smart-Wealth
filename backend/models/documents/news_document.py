@@ -1,12 +1,10 @@
 from typing import Any, List, Optional
 from datetime import datetime
-from pydantic import HttpUrl
 
 from backend.models.documents import BaseTextDocument, BaseDocumentMeta
 
 
-class NewsBaseDocumentMeta(BaseDocumentMeta):
-    id: str
+class NewsDocumentMeta(BaseDocumentMeta):
     author_name: str
     company_name: str
     keywords: List[str]
@@ -16,13 +14,14 @@ class NewsBaseDocumentMeta(BaseDocumentMeta):
     sector: str
     summary: str
     date_published: datetime
+    ticker: Optional[str] = None
 
 
 class NewsDocument(BaseTextDocument):
-    news_meta: NewsBaseDocumentMeta
+    document_meta: NewsDocumentMeta
 
     def __init__(self, /, **data: Any):
-        self.news_meta = NewsBaseDocumentMeta(**data)
+        super().__init__(**data)
 
     def format_document(self):
         return self.page_content
