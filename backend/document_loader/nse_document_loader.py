@@ -168,6 +168,7 @@ class NseIndexLoader(BaseDocumentLoader[NseIndexDocument]):
                     company_name = company["longname"]
                 else:
                     company_name = company["shortname"]
+                break
 
         return company_name
 

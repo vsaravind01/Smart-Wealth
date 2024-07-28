@@ -20,6 +20,13 @@ web_tag_map = {
         "fixed+deposit",
         "fixed%20deposit",
     ],
+    "term-deposit": [
+        "term-deposit",
+        "termdeposit",
+        "term deposit",
+        "term+deposit",
+        "term%20deposit",
+    ],
     "article": ["banking-mantra", "article", "banking mantra", "banking_mantra"],
     "credit-card": ["credit-card", "credit card", "creditcard", "credit_card"],
     "debit-card": ["debit-card", "debit card", "debitcard", "debit_card"],
