@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from io import StringIO
 from os import PathLike
-from typing import Any, Optional, TypeVar, Generator, Generic
+from typing import Any, Iterable, Optional, Sequence, TypeVar, Generator, Generic
 
 from backend.models.documents import BaseDocument, BaseTextDocument
 from backend.vector_stores import AzureCosmosVectorStore
@@ -51,17 +51,17 @@ class BaseDocumentLoader(Generic[T]):
             yield _doc
 
     @staticmethod
-    def get_document_attrs(document: BaseDocument, attrs: list[str]) -> Any:
+    def get_document_attrs(document: BaseDocument, attrs: list[str]) -> str:
         _doc = document
         for attr in attrs:
-            _doc = getattr(_doc, attr)
+            _doc = getattr(_doc, attr, None)
         return _doc
 
     def set_tags(
         self,
-        documents: list[BaseDocument],
-        tag_fields: list[list[str]] = None,
-        must_tags: Optional[list[str]] = None,
+        documents: Iterable[BaseDocument],
+        tag_fields: Sequence[list[str]] = None,
+        must_tags: Optional[Iterable[str]] = None,
     ) -> None:
         """set tags of the document in place"""
         if not must_tags:
@@ -74,11 +74,12 @@ class BaseDocumentLoader(Generic[T]):
                 _tags = set(must_tags)
             for key, tags in self.tag_map.items():
                 for tag in tags:
-                    if any(
-                        tag in BaseDocumentLoader.get_document_attrs(document, attrs)
-                        for attrs in tag_fields
-                    ):
-                        _tags.add(tag)
+                    values = [
+                        self.get_document_attrs(document, tag_field)
+                        for tag_field in tag_fields
+                    ]
+                    if any(tag in value for value in values if value):
+                        _tags.add(key)
             document.document_meta.tags = list(_tags)
 
     def upsert_to_vector_store(
@@ -100,16 +101,51 @@ class BaseDocumentLoader(Generic[T]):
         )
 
     @staticmethod
+    def iter_documents_from_template(
+        documents: list[BaseTextDocument | BaseDocument],
+    ) -> Generator[tuple[str, BaseTextDocument | BaseDocument]]:
+        for document in documents:
+            assert hasattr(
+                document, "format_document"
+            ), "The document must have a format_document method to be uploaded to the vector store"
+            yield document.format_document(), document
+
+    @classmethod
+    def base_embed_upsert_to_vector_store(
+        cls,
+        documents: list[BaseDocument],
+        database_name: str,
+        container_name: str,
+        max_token_limit: Optional[int] = float("inf"),
+        document_range: Optional[tuple[int, int]] = (0, float("inf")),
+    ) -> int:
+        vector_store = AzureCosmosVectorStore(
+            database_name=database_name, container_name=container_name
+        )
+        documents_to_upload = documents
+        total_tokens = vector_store.embed_upsert_documents(
+            documents=documents_to_upload,
+            template_iter=cls.iter_documents_from_template,
+            max_token_limit=max_token_limit,
+            document_range=document_range,
+        )
+        return total_tokens
+
+    @staticmethod
     def save_dataset(content: str | StringIO, filepath: PathLike) -> None:
         """save the dataset to the given filepath"""
         with open(filepath, "w") as file:
             json.dump(content, file)
 
-    def save_documents(self, filepath: PathLike) -> None:
+    def save_documents(self, filepath: PathLike, jsonl: Optional[bool] = False) -> None:
         """save the documents to the given filepath"""
         content = [doc.to_json() for doc in self.documents]
         with open(filepath, "w") as file:
-            json.dump(content, file)
+            if jsonl:
+                for line in content:
+                    file.write(json.dumps(line) + "\n")
+            else:
+                json.dump(content, file)
 
     def _load_documents(self, dataset: list[dict]) -> None:
         raise NotImplementedError()
@@ -154,13 +190,3 @@ class BaseTextDocumentLoader(BaseDocumentLoader[T]):
             document_range=document_range,
         )
         return total_tokens
-
-    @staticmethod
-    def iter_documents_from_template(
-        documents: list[BaseTextDocument],
-    ) -> Generator[tuple[str, BaseTextDocument]]:
-        for document in documents:
-            assert isinstance(
-                document, BaseTextDocument
-            ), "Invalid Document Type. Documents should be type BaseTextDocument"
-            yield document.format_document(), document
