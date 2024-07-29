@@ -5,7 +5,7 @@ from typing import List, Optional
 from backend.models.documents import BaseDocument
 
 
-class EmbeddingDocument(BaseModel):
+class ResponseDocument(BaseModel):
     document: BaseDocument
     similarity_score: float
 

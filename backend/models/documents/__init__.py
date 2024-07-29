@@ -15,7 +15,7 @@ from backend.models.documents.mutualfund_document import (
     MutualFundDocument,
     MutualFundDocumentMeta,
 )
-from backend.models.documents.embedding_document import EmbeddingDocument
+from backend.models.documents.embedding_document import ResponseDocument
 
 __all__ = [
     "BaseDocumentMeta",
@@ -33,5 +33,5 @@ __all__ = [
     "ExpertDocumentMeta",
     "MutualFundDocument",
     "MutualFundDocumentMeta",
-    "EmbeddingDocument",
+    "ResponseDocument",
 ]
