@@ -1,7 +1,7 @@
 import os
 from typing import Any, Literal, Optional, Sequence
 
-from backend.models.documents import BaseDocument, EmbeddingDocument
+from backend.models.documents import BaseDocument, ResponseDocument
 from backend.vector_stores.azure_cosmos_db import AzureCosmosVectorStore
 from backend.models.loader_utils.type_maps import SourceMap
 
@@ -33,7 +33,7 @@ class BobWebVectorStore(AzureCosmosVectorStore):
         threshold: Optional[float] = 0.0,
         with_embeddings: Optional[bool] = False,
         filters: Optional[dict[Literal["AND", "OR"], Any]] = None,
-    ) -> list[EmbeddingDocument]:
+    ) -> list[ResponseDocument]:
 
         assert doc_type is not None, "kind must be provided"
         assert doc_type in SourceMap, f"kind must be one of {SourceMap}"

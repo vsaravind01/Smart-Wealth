@@ -22,6 +22,10 @@ def build_where_clause(filters):
                 parts.append(f"{field} != '{value}'")
             elif op == "in":
                 parts.append(f"{field} IN ({', '.join([f"'{v}'" for v in value])})")
+            elif op == "like":
+                parts.append(f"{field} LIKE '%{value}%'")
+            elif op == "ilike":
+                parts.append(f"LOWER({field}) LIKE '%{value.lower()}%'")
             else:
                 raise ValueError(f"Unsupported operation: {op}")
         return " AND ".join(parts)
