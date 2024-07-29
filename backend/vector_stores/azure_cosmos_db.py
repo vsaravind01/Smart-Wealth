@@ -12,7 +12,7 @@ from openai.lib.azure import AzureOpenAI
 from openai.types import CreateEmbeddingResponse
 from azure.cosmos import CosmosClient, PartitionKey, ContainerProxy, DatabaseProxy
 
-from backend.models.documents import BaseDocument, BaseTextDocument, EmbeddingDocument
+from backend.models.documents import BaseDocument, BaseTextDocument, ResponseDocument
 from backend.vector_stores.utils import num_tokens_from_string, build_where_clause
 from backend.vector_stores.config import container_to_document_map
 
@@ -251,7 +251,7 @@ class AzureCosmosVectorStore:
         with_embeddings: Optional[bool] = False,
         filters: Optional[dict[Literal["AND", "OR"], Any]] = None,
         columns: Sequence[str] = None,
-    ) -> list[EmbeddingDocument]:
+    ) -> list[ResponseDocument]:
         """Search for similar documents based on the query
 
         Args:
@@ -269,7 +269,7 @@ class AzureCosmosVectorStore:
                 Columns to return, by default None
 
         Returns:
-            list[EmbeddingDocument]: List of similar documents
+            list[ResponseDocument]: List of similar documents
 
         Examples:
             >>> store = AzureCosmosVectorStore(database_name="test_db", container_name="test_container")
@@ -335,13 +335,19 @@ class AzureCosmosVectorStore:
         document_class = config.document_class
         documents = []
         for item in items:
-            if item[self._similarity_key] > threshold:
-                document = EmbeddingDocument(
-                    document=document_class(**item),
-                    similarity_score=item[self._similarity_key],
-                )
-                if with_embeddings:
-                    document.embedding = item[self._embedding_key]
+            if self._similarity_key in item:
+                if item[self._similarity_key] > threshold:
+                    document = ResponseDocument(
+                        document=document_class(**item),
+                        similarity_score=item[self._similarity_key],
+                    )
+                    if with_embeddings:
+                        document.embedding = item[self._embedding_key]
+                else:
+                    document = ResponseDocument(
+                        document=document_class(**item),
+                        similarity_score=item[self._similarity_key],
+                    )
                 documents.append(document)
         return documents
 
