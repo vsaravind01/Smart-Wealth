@@ -52,9 +52,7 @@ class InvestorAgent(Agent):
         "New partnerships or collaborations",
         "Financial results",
     ]
-    expert_news_attributes = [
-        "Financials", ""
-    ]
+    expert_news_attributes = ["Financials", "Market Trend"]
     stock_news_vector_store = AzureCosmosVectorStore(
         database_name="smart-wealth-main-db", container_name="stock-news"
     )
