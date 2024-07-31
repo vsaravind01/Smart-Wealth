@@ -53,8 +53,8 @@ class AzureCosmosVectorStore:
 
     def __init__(
         self,
-        database_name: str,
         container_name: str,
+        database_name: Optional[str] = os.environ["BOB_AZURE_COSMOS_DATABASE_NAME"],
         is_vector_enabled: bool = True,
         partition_key: Optional[str] = "/document_meta/date_created",
     ):
@@ -242,6 +242,29 @@ class AzureCosmosVectorStore:
         documents = [document_class(**item) for item in items]
 
         return documents
+
+    def get_all_unique_meta(self, column: str) -> list[str]:
+        """Get all unique values for the given column in the document meta
+
+        Args:
+            column (str): Column to get unique values for
+
+        Returns:
+            list[str]: List of unique values
+        """
+        query = f"SELECT c.document_meta.{column} FROM c"
+        items = list(
+            self._container.query_items(query=query, enable_cross_partition_query=True)
+        )
+        unique = set()
+        for item in items:
+            if len(item):
+                if isinstance(item[column], list):
+                    unique.update(item[column])
+                else:
+                    unique.add(item[column])
+        unique.remove("null")
+        return list(unique)
 
     def vector_search(
         self,
