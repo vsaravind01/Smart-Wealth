@@ -92,8 +92,6 @@ class AgentsNetwork:
         last_message = messages[-1]
         if last_message.tool_calls:
             return "call_tool"
-        if "FINAL ANSWER" in last_message.content:
-            return "__end__"
         return "continue"
 
     def create_agent_network(self) -> None:
@@ -117,21 +115,17 @@ class AgentsNetwork:
         self.graph.add_conditional_edges(
             "MarketAnalyzerAgent",
             self.router,
-            {"continue": "PrincipalAgent", "call_tool": "call_tool", "__end__": END},
+            {"continue": "PrincipalAgent", "call_tool": "call_tool"},
         )
         self.graph.add_conditional_edges(
             "InvestorAgent",
             self.router,
-            {
-                "continue": "PrincipalAgent",
-                "call_tool": "call_tool",
-                "__end__": END,
-            },
+            {"continue": "PrincipalAgent", "call_tool": "call_tool"},
         )
         self.graph.add_conditional_edges(
             "PersonalFinanceAgent",
             self.router,
-            {"continue": "PrincipalAgent", "call_tool": "call_tool", "__end__": END},
+            {"continue": "PrincipalAgent", "call_tool": "call_tool"},
         )
         self.graph.add_conditional_edges(
             "call_tool",
