@@ -67,7 +67,7 @@ class InvestorAgent(Agent):
 
     @staticmethod
     @tool("allocate_mutual_funds", return_direct=False)
-    def allocate_mutual_funds(mutual_fund_split) -> dict:
+    def allocate_mutual_funds(mutual_fund_split,suggested_companies,desired_sector) -> dict:
         """
         Provides guidance on how to allocate a portion of the portfolio across various equity funds.
         """
@@ -80,16 +80,27 @@ class InvestorAgent(Agent):
             mutual_fund_vector_store = AzureCosmosVectorStore(
                 database_name="smart-wealth-main-db", container_name="mutual-fund"
             )
-            response = mutual_fund_vector_store.filter_documents(
-                filters={
-                    # "document_meta.minimum_investment_amount": {
-                    #     "lt": mutual_fund_split
-                    # },
-                    # "document_meta.scheme_riskometer": {"like": fund_type},
-                    # "document_meta.tickers": {"in": ["suggested_companies"]},
-                    # "document_meta.sectoral_composition": {"in": ["desired_sector"]},
+            # response = mutual_fund_vector_store.filter_documents(
+            #     filters={
+            #         "document_meta.minimum_investment_amount": {
+            #             "lt": mutual_fund_split
+            #         },
+            #         "document_meta.scheme_riskometer": {"like": fund_type},
+            #         "document_meta.tickers": {"in": ["suggested_companies"]},
+            #         "document_meta.sectoral_composition": {"in": ["desired_sector"]},
+            #     }
+            # )
+            filter = {
+                "AND": {
+                    "document_meta.sectoral_composition_list": desired_sector,
+                    "document_meta.scheme_riskometer": {
+                        "ilike":fund_type
+                    },
+                    "document_meta.tickers":suggested_companies
                 }
-            )
+            }
+            response=mutual_fund_vector_store.filter_documents(filters=filter)
+
             fund_json_list = []
             for document in response:
                 meta = document.document_meta
