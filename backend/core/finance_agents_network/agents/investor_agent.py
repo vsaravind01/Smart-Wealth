@@ -53,10 +53,7 @@ class InvestorAgent(Agent):
         "Financial results",
     ]
     expert_news_attributes = [
-        "Acquisition",
-        "New product launches",
-        "New partnerships or collaborations",
-        "Financial results",
+        "Financials", ""
     ]
     stock_news_vector_store = AzureCosmosVectorStore(
         database_name="smart-wealth-main-db", container_name="stock-news"
@@ -95,48 +92,53 @@ class InvestorAgent(Agent):
         )
 
         for company in company_list:
-            search_queries = InvestorAgent.get_search_queries(
-                company, InvestorAgent.stock_news_attributes
-            )
+            company_name = company["company"]
+            print(f"Processing analysis for company: {company_name}")
 
-            for query in search_queries:
+            # Get news summaries
+            search_queries_news = InvestorAgent.get_search_queries(
+                company_name, InvestorAgent.stock_news_attributes
+            )
+            for query in search_queries_news:
                 print("News query----->>", query)
-                # Get news summaries
                 search_results_news = (
                     InvestorAgent.stock_news_vector_store.vector_search(
                         query, top_k=3, threshold=0.3, with_embeddings=False
                     )
                 )
                 for res in search_results_news:
-                    combined_analysis[company]["sector"].update(
+                    combined_analysis[company_name]["sector"].update(
                         res.document.document_meta.sector
                     )
-                    combined_analysis[company]["news_summary"].add(
+                    combined_analysis[company_name]["news_summary"].add(
                         res.document.document_meta.summary
                     )
 
-            search_queries = InvestorAgent.get_search_queries(
-                company, InvestorAgent.stock_news_attributes
+            # Get expert analysis
+            search_queries_expert = InvestorAgent.get_search_queries(
+                company_name, InvestorAgent.expert_news_attributes
             )
-            for query in search_queries:
+            for query in search_queries_expert:
                 print("Expert Analysis query----->>", query)
-                # Get expert analysis
                 search_results_expert = (
                     InvestorAgent.expert_news_vector_store.vector_search(
                         query, top_k=3, threshold=0.3, with_embeddings=False
                     )
                 )
                 for res in search_results_expert:
-                    combined_analysis[company]["segments"].update(
+                    combined_analysis[company_name]["segments"].update(
                         res.document.document_meta.segments
                     )
-                    combined_analysis[company]["analysis_summary"].add(
+                    combined_analysis[company_name]["analysis_summary"].add(
                         res.document.document_meta.summary
                     )
 
         result = [
             {
                 "company_name": company,
+                "rank": details.get("rank", None),
+                "ticker": details.get("ticker", None),
+                "growth": details.get("growth", None),
                 "sector": list(details["sector"]),
                 "news_summary": list(details["news_summary"]),
                 "segments": list(details["segments"]),
@@ -165,20 +167,24 @@ class InvestorAgent(Agent):
 
     @staticmethod
     @tool("allocate_mutual_funds", return_direct=False)
-    def allocate_mutual_funds(top_companies) -> dict:
+    def allocate_mutual_funds(top_companies: list) -> dict:
         """
         Provides guidance on how to allocate a portion of the portfolio across various equity funds.
         """
         top_companies_ticker = []
         nse_loader = NseIndexLoader()
-        for company_name in top_companies:
-            top_companies_ticker.append(
-                nse_loader.get_ticker_from_company_name(company_name)
-            )
+
+        for company in top_companies:
+            company_name = company.get("company")
+            if company_name:
+                ticker = nse_loader.get_ticker_from_company_name(company_name)
+                if ticker:
+                    top_companies_ticker.append(ticker)
 
         print("Mutual Funds Allocation", top_companies_ticker)
         investment_period = InvestmentPeriod.LONG_TERM
         risk_appetite = RiskAppetite.MODERATE
+
         if isinstance(investment_period, InvestmentPeriod) and isinstance(
             risk_appetite, RiskAppetite
         ):
@@ -187,9 +193,8 @@ class InvestorAgent(Agent):
                 database_name="smart-wealth-main-db", container_name="mutual-fund"
             )
             filter = {
-                # "document_meta.sectoral_composition_list": desired_sector,
                 "document_meta.scheme_riskometer": {"ilike": risk_appetite.value},
-                "document_meta.tickers": top_companies_ticker,
+                "document_meta.tickers": {"in": top_companies_ticker},
             }
             response = mutual_fund_vector_store.filter_documents(filters=filter)
 
@@ -262,4 +267,5 @@ class InvestorAgent(Agent):
             HumanMessage(content=str(top_companies_summary)),
         ]
         response = llm_instance.invoke(messages)
+        print("res", response)
         return response.content
