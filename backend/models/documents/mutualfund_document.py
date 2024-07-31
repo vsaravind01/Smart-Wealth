@@ -19,6 +19,8 @@ class MutualFundDocumentMeta(BaseDocumentMeta):
     composition_by_assets: Optional[dict[str, Any]] = None
     credit_quality_profile: Optional[dict[str, Any]] = None
 
+    tickers: Optional[list[str]] = None
+
 
 class MutualFundDocument(BaseDocument):
     document_meta: MutualFundDocumentMeta
