@@ -21,7 +21,11 @@ def build_where_clause(filters):
             elif op == "neq":
                 parts.append(f"{field} != '{value}'")
             elif op == "in":
-                parts.append(f"{field} IN ({', '.join([f"'{v}'" for v in value])})")
+                format = [f"'{v}'" for v in value]
+                parts.append(f"{field} IN ({', '.join(format)})")
+            elif op == "iin":
+                format = [f"'{v.lower()}'" for v in value]
+                parts.append(f"LOWER({field}) IN ({', '.join(format)})")
             elif op == "like":
                 parts.append(f"{field} LIKE '%{value}%'")
             elif op == "ilike":
