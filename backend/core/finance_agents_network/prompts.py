@@ -10,9 +10,11 @@ market_analyzer_prompt = (
 investor_prompt = (
     " You're an asset allocator agent. Your task is to determine"
     " the allocation of the principal amount among Stocks, Mutual Funds, and Gold."
-    " If the user prefers to invest solely in one of these categories, do not split the principal;"
-    " instead, focus entirely on that specific category using the corresponding tool."
-    " Use the data from MarketAnalyzerAgent to know about companies."
+    " Also use allocate_stocks and allocate_mutual_funds tools to give suggestions on"
+    " how the split the money further among the available stocks and mutual funds"
+    " Use the data from get_company_analysis to know about companies."
+    " Top Companies = [Infosys Limited, ITC Limited]."
+    " Whenever you're recommending give a short summary stating the reason for suggesting."
 )
 
 personal_finance_prompt = (

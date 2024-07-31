@@ -14,7 +14,12 @@ class MarketAnalyzerAgent(Agent):
         "New partnerships or collaborations",
         "Financial results",
     ]
-    expert_news_attributes = []
+    expert_news_attributes = [
+        "Acquisition",
+        "New product launches",
+        "New partnerships or collaborations",
+        "Financial results",
+    ]
     stock_news_vector_store = AzureCosmosVectorStore(
         database_name="smart-wealth-main-db", container_name="stock-news"
     )
@@ -23,7 +28,10 @@ class MarketAnalyzerAgent(Agent):
     )
 
     def __init__(self, name: str, system_prompt: str) -> None:
-        tools = [self.get_news_articles, self.get_expert_analysis]
+        tools = [
+            self.get_news_articles,
+            self.get_expert_analysis,
+        ]
         super().__init__(name, tools, system_prompt)
 
     @staticmethod
