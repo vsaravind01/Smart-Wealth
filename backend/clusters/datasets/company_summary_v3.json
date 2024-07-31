@@ -1,0 +1,933 @@
+{
+    "Infosys Limited": {
+        "articles_count": 54,
+        "company_sentiment": {
+            "positive": 0.2852627629224487,
+            "negative": 0.5464103456879793,
+            "neutral": 0.16832688081733607,
+            "positive_count": 15,
+            "negative_count": 31,
+            "neutral_count": 8
+        },
+        "company_trend": {
+            "bullish": 57.407407407407405,
+            "bearish": 12.962962962962962,
+            "neutral": 29.629629629629626,
+            "bullish_count": 31,
+            "bearish_count": 7,
+            "neutral_count": 16
+        }
+    },
+    "ITC Limited": {
+        "articles_count": 17,
+        "company_sentiment": {
+            "positive": 0.2344428862390273,
+            "negative": 0.5064906866892296,
+            "neutral": 0.2590664137593087,
+            "positive_count": 3,
+            "negative_count": 10,
+            "neutral_count": 4
+        },
+        "company_trend": {
+            "bullish": 47.05882352941176,
+            "bearish": 11.76470588235294,
+            "neutral": 41.17647058823529,
+            "bullish_count": 8,
+            "bearish_count": 2,
+            "neutral_count": 7
+        }
+    },
+    "ICICI Bank Limited": {
+        "articles_count": 25,
+        "company_sentiment": {
+            "positive": 0.35283814284950493,
+            "negative": 0.4034539804980159,
+            "neutral": 0.2437078696489334,
+            "positive_count": 8,
+            "negative_count": 11,
+            "neutral_count": 6
+        },
+        "company_trend": {
+            "bullish": 60.0,
+            "bearish": 8.0,
+            "neutral": 32.0,
+            "bullish_count": 15,
+            "bearish_count": 2,
+            "neutral_count": 8
+        }
+    },
+    "Tata Consultancy Services Limited": {
+        "articles_count": 39,
+        "company_sentiment": {
+            "positive": 0.3970998807165485,
+            "negative": 0.47550179448742896,
+            "neutral": 0.12739832572734508,
+            "positive_count": 16,
+            "negative_count": 20,
+            "neutral_count": 3
+        },
+        "company_trend": {
+            "bullish": 64.1025641025641,
+            "bearish": 10.256410256410255,
+            "neutral": 25.64102564102564,
+            "bullish_count": 25,
+            "bearish_count": 4,
+            "neutral_count": 10
+        }
+    },
+    "Hindustan Unilever Limited": {
+        "articles_count": 20,
+        "company_sentiment": {
+            "positive": 0.575928491121158,
+            "negative": 0.35676390593871476,
+            "neutral": 0.06730759432539343,
+            "positive_count": 12,
+            "negative_count": 8,
+            "neutral_count": 0
+        },
+        "company_trend": {
+            "bullish": 35.0,
+            "bearish": 15.0,
+            "neutral": 50.0,
+            "bullish_count": 7,
+            "bearish_count": 3,
+            "neutral_count": 10
+        }
+    },
+    "State Bank of India": {
+        "articles_count": 25,
+        "company_sentiment": {
+            "positive": 0.10406444374471903,
+            "negative": 0.6205399003624916,
+            "neutral": 0.27539566092193124,
+            "positive_count": 3,
+            "negative_count": 16,
+            "neutral_count": 6
+        },
+        "company_trend": {
+            "bullish": 76.0,
+            "bearish": 0.0,
+            "neutral": 24.0,
+            "bullish_count": 19,
+            "bearish_count": 0,
+            "neutral_count": 6
+        }
+    },
+    "HDFC Bank Limited": {
+        "articles_count": 46,
+        "company_sentiment": {
+            "positive": 0.4144405770095308,
+            "negative": 0.4532931104059453,
+            "neutral": 0.13226631044855583,
+            "positive_count": 19,
+            "negative_count": 22,
+            "neutral_count": 5
+        },
+        "company_trend": {
+            "bullish": 50.0,
+            "bearish": 6.521739130434782,
+            "neutral": 43.47826086956522,
+            "bullish_count": 23,
+            "bearish_count": 3,
+            "neutral_count": 20
+        }
+    },
+    "Kotak Mahindra Bank Limited": {
+        "articles_count": 40,
+        "company_sentiment": {
+            "positive": 0.4942683456116356,
+            "negative": 0.2885461971280165,
+            "neutral": 0.21718544634059073,
+            "positive_count": 21,
+            "negative_count": 11,
+            "neutral_count": 8
+        },
+        "company_trend": {
+            "bullish": 27.500000000000004,
+            "bearish": 25.0,
+            "neutral": 47.5,
+            "bullish_count": 11,
+            "bearish_count": 10,
+            "neutral_count": 19
+        }
+    },
+    "Maruti Suzuki India Limited": {
+        "articles_count": 33,
+        "company_sentiment": {
+            "positive": 0.1504053616557609,
+            "negative": 0.6457775474779985,
+            "neutral": 0.2038170931804361,
+            "positive_count": 4,
+            "negative_count": 22,
+            "neutral_count": 7
+        },
+        "company_trend": {
+            "bullish": 69.6969696969697,
+            "bearish": 3.0303030303030303,
+            "neutral": 27.27272727272727,
+            "bullish_count": 23,
+            "bearish_count": 1,
+            "neutral_count": 9
+        }
+    },
+    "Bajaj Finserv Limited": {
+        "articles_count": 2,
+        "company_sentiment": {
+            "positive": 0.5078962910920382,
+            "negative": 0.022061621537432075,
+            "neutral": 0.4700421132147312,
+            "positive_count": 1,
+            "negative_count": 0,
+            "neutral_count": 1
+        },
+        "company_trend": {
+            "bullish": 50.0,
+            "bearish": 0.0,
+            "neutral": 50.0,
+            "bullish_count": 1,
+            "bearish_count": 0,
+            "neutral_count": 1
+        }
+    },
+    "SBI Life Insurance Company Limited": {
+        "articles_count": 5,
+        "company_sentiment": {
+            "positive": 0.21836588606238366,
+            "negative": 0.5543358091264963,
+            "neutral": 0.2272982895374298,
+            "positive_count": 1,
+            "negative_count": 3,
+            "neutral_count": 1
+        },
+        "company_trend": {
+            "bullish": 80.0,
+            "bearish": 0.0,
+            "neutral": 20.0,
+            "bullish_count": 4,
+            "bearish_count": 0,
+            "neutral_count": 1
+        }
+    },
+    "Larsen & Toubro Limited": {
+        "articles_count": 23,
+        "company_sentiment": {
+            "positive": 0.06795983520619896,
+            "negative": 0.754791296451636,
+            "neutral": 0.17724886374629062,
+            "positive_count": 1,
+            "negative_count": 19,
+            "neutral_count": 3
+        },
+        "company_trend": {
+            "bullish": 82.6086956521739,
+            "bearish": 4.3478260869565215,
+            "neutral": 13.043478260869565,
+            "bullish_count": 19,
+            "bearish_count": 1,
+            "neutral_count": 3
+        }
+    },
+    "Nestle India Limited": {
+        "articles_count": 23,
+        "company_sentiment": {
+            "positive": 0.36893554161424225,
+            "negative": 0.4487056352360093,
+            "neutral": 0.18235881756181302,
+            "positive_count": 8,
+            "negative_count": 11,
+            "neutral_count": 4
+        },
+        "company_trend": {
+            "bullish": 30.434782608695656,
+            "bearish": 13.043478260869565,
+            "neutral": 56.52173913043478,
+            "bullish_count": 7,
+            "bearish_count": 3,
+            "neutral_count": 13
+        }
+    },
+    "Axis Bank Limited": {
+        "articles_count": 17,
+        "company_sentiment": {
+            "positive": 0.3052262097925824,
+            "negative": 0.3691312665777171,
+            "neutral": 0.3256425303133095,
+            "positive_count": 5,
+            "negative_count": 6,
+            "neutral_count": 6
+        },
+        "company_trend": {
+            "bullish": 47.05882352941176,
+            "bearish": 5.88235294117647,
+            "neutral": 47.05882352941176,
+            "bullish_count": 8,
+            "bearish_count": 1,
+            "neutral_count": 8
+        }
+    },
+    "Cipla Limited": {
+        "articles_count": 10,
+        "company_sentiment": {
+            "positive": 0.3050555856898427,
+            "negative": 0.5886926790699363,
+            "neutral": 0.10625174306333066,
+            "positive_count": 3,
+            "negative_count": 6,
+            "neutral_count": 1
+        },
+        "company_trend": {
+            "bullish": 80.0,
+            "bearish": 10.0,
+            "neutral": 10.0,
+            "bullish_count": 8,
+            "bearish_count": 1,
+            "neutral_count": 1
+        }
+    },
+    "Bharti Airtel Limited": {
+        "articles_count": 34,
+        "company_sentiment": {
+            "positive": 0.3169309187625699,
+            "negative": 0.5408914694425595,
+            "neutral": 0.1421776129042401,
+            "positive_count": 12,
+            "negative_count": 20,
+            "neutral_count": 2
+        },
+        "company_trend": {
+            "bullish": 55.88235294117647,
+            "bearish": 14.705882352941178,
+            "neutral": 29.411764705882355,
+            "bullish_count": 19,
+            "bearish_count": 5,
+            "neutral_count": 10
+        }
+    },
+    "Hero MotoCorp Limited": {
+        "articles_count": 23,
+        "company_sentiment": {
+            "positive": 0.21028662011351273,
+            "negative": 0.6274782638267978,
+            "neutral": 0.16223511674805827,
+            "positive_count": 5,
+            "negative_count": 15,
+            "neutral_count": 3
+        },
+        "company_trend": {
+            "bullish": 73.91304347826086,
+            "bearish": 4.3478260869565215,
+            "neutral": 21.73913043478261,
+            "bullish_count": 17,
+            "bearish_count": 1,
+            "neutral_count": 5
+        }
+    },
+    "Grasim Industries Limited": {
+        "articles_count": 7,
+        "company_sentiment": {
+            "positive": 0.2736240276800735,
+            "negative": 0.5392050434436116,
+            "neutral": 0.1871709137090615,
+            "positive_count": 2,
+            "negative_count": 4,
+            "neutral_count": 1
+        },
+        "company_trend": {
+            "bullish": 57.14285714285714,
+            "bearish": 0.0,
+            "neutral": 42.857142857142854,
+            "bullish_count": 4,
+            "bearish_count": 0,
+            "neutral_count": 3
+        }
+    },
+    "Tech Mahindra Limited": {
+        "articles_count": 29,
+        "company_sentiment": {
+            "positive": 0.2756840281252717,
+            "negative": 0.5781025996046334,
+            "neutral": 0.1462133602271306,
+            "positive_count": 8,
+            "negative_count": 18,
+            "neutral_count": 3
+        },
+        "company_trend": {
+            "bullish": 55.172413793103445,
+            "bearish": 13.793103448275861,
+            "neutral": 31.03448275862069,
+            "bullish_count": 16,
+            "bearish_count": 4,
+            "neutral_count": 9
+        }
+    },
+    "Sun Pharmaceutical Industries Limited": {
+        "articles_count": 17,
+        "company_sentiment": {
+            "positive": 0.4739535607890609,
+            "negative": 0.3380536597002955,
+            "neutral": 0.18799277888063123,
+            "positive_count": 9,
+            "negative_count": 5,
+            "neutral_count": 3
+        },
+        "company_trend": {
+            "bullish": 41.17647058823529,
+            "bearish": 11.76470588235294,
+            "neutral": 47.05882352941176,
+            "bullish_count": 7,
+            "bearish_count": 2,
+            "neutral_count": 8
+        }
+    },
+    "IndusInd Bank Limited": {
+        "articles_count": 12,
+        "company_sentiment": {
+            "positive": 0.244843943316179,
+            "negative": 0.5977174862443159,
+            "neutral": 0.1574385742812107,
+            "positive_count": 3,
+            "negative_count": 8,
+            "neutral_count": 1
+        },
+        "company_trend": {
+            "bullish": 66.66666666666666,
+            "bearish": 0.0,
+            "neutral": 33.33333333333333,
+            "bullish_count": 8,
+            "bearish_count": 0,
+            "neutral_count": 4
+        }
+    },
+    "Reliance Industries Limited": {
+        "articles_count": 43,
+        "company_sentiment": {
+            "positive": 0.27440396997384553,
+            "negative": 0.554360048964533,
+            "neutral": 0.17123597890658435,
+            "positive_count": 12,
+            "negative_count": 25,
+            "neutral_count": 6
+        },
+        "company_trend": {
+            "bullish": 67.44186046511628,
+            "bearish": 11.627906976744185,
+            "neutral": 20.930232558139537,
+            "bullish_count": 29,
+            "bearish_count": 5,
+            "neutral_count": 9
+        }
+    },
+    "HDFC Life Insurance Company Limited": {
+        "articles_count": 1,
+        "company_sentiment": {
+            "positive": 0.8682673573493958,
+            "negative": 0.02538703940808773,
+            "neutral": 0.10634566843509674,
+            "positive_count": 1,
+            "negative_count": 0,
+            "neutral_count": 0
+        },
+        "company_trend": {
+            "bullish": 100.0,
+            "bearish": 0.0,
+            "neutral": 0.0,
+            "bullish_count": 1,
+            "bearish_count": 0,
+            "neutral_count": 0
+        }
+    },
+    "Apollo Hospitals Enterprise Limited": {
+        "articles_count": 8,
+        "company_sentiment": {
+            "positive": 0.33943003963213414,
+            "negative": 0.4909385269857012,
+            "neutral": 0.1696314171422273,
+            "positive_count": 3,
+            "negative_count": 4,
+            "neutral_count": 1
+        },
+        "company_trend": {
+            "bullish": 62.5,
+            "bearish": 37.5,
+            "neutral": 0.0,
+            "bullish_count": 5,
+            "bearish_count": 3,
+            "neutral_count": 0
+        }
+    },
+    "Mahindra & Mahindra Limited": {
+        "articles_count": 33,
+        "company_sentiment": {
+            "positive": 0.31562171968151675,
+            "negative": 0.6102884070750213,
+            "neutral": 0.07408988464510802,
+            "positive_count": 10,
+            "negative_count": 23,
+            "neutral_count": 0
+        },
+        "company_trend": {
+            "bullish": 66.66666666666666,
+            "bearish": 18.181818181818183,
+            "neutral": 15.151515151515152,
+            "bullish_count": 22,
+            "bearish_count": 6,
+            "neutral_count": 5
+        }
+    },
+    "Bajaj Finance Limited": {
+        "articles_count": 20,
+        "company_sentiment": {
+            "positive": 0.12575217632111163,
+            "negative": 0.7157302534207701,
+            "neutral": 0.15851756604388356,
+            "positive_count": 3,
+            "negative_count": 15,
+            "neutral_count": 2
+        },
+        "company_trend": {
+            "bullish": 85.0,
+            "bearish": 10.0,
+            "neutral": 5.0,
+            "bullish_count": 17,
+            "bearish_count": 2,
+            "neutral_count": 1
+        }
+    },
+    "Adani Enterprises Limited": {
+        "articles_count": 45,
+        "company_sentiment": {
+            "positive": 0.13528582042910986,
+            "negative": 0.6729968229101764,
+            "neutral": 0.19171735557417074,
+            "positive_count": 6,
+            "negative_count": 31,
+            "neutral_count": 8
+        },
+        "company_trend": {
+            "bullish": 80.0,
+            "bearish": 6.666666666666667,
+            "neutral": 13.333333333333334,
+            "bullish_count": 36,
+            "bearish_count": 3,
+            "neutral_count": 6
+        }
+    },
+    "Bajaj Auto Limited": {
+        "articles_count": 32,
+        "company_sentiment": {
+            "positive": 0.1319393864250742,
+            "negative": 0.647273729526205,
+            "neutral": 0.22078687808243558,
+            "positive_count": 4,
+            "negative_count": 22,
+            "neutral_count": 6
+        },
+        "company_trend": {
+            "bullish": 84.375,
+            "bearish": 0.0,
+            "neutral": 15.625,
+            "bullish_count": 27,
+            "bearish_count": 0,
+            "neutral_count": 5
+        }
+    },
+    "Wipro Limited": {
+        "articles_count": 50,
+        "company_sentiment": {
+            "positive": 0.32168518856167794,
+            "negative": 0.5000160410068929,
+            "neutral": 0.17829876504838466,
+            "positive_count": 17,
+            "negative_count": 27,
+            "neutral_count": 6
+        },
+        "company_trend": {
+            "bullish": 50.0,
+            "bearish": 16.0,
+            "neutral": 34.0,
+            "bullish_count": 25,
+            "bearish_count": 8,
+            "neutral_count": 17
+        }
+    },
+    "UltraTech Cement Limited": {
+        "articles_count": 27,
+        "company_sentiment": {
+            "positive": 0.13001011129192733,
+            "negative": 0.6617381721735001,
+            "neutral": 0.20825170090904943,
+            "positive_count": 3,
+            "negative_count": 19,
+            "neutral_count": 5
+        },
+        "company_trend": {
+            "bullish": 62.96296296296296,
+            "bearish": 3.7037037037037033,
+            "neutral": 33.33333333333333,
+            "bullish_count": 17,
+            "bearish_count": 1,
+            "neutral_count": 9
+        }
+    },
+    "Tata Motors Limited": {
+        "articles_count": 48,
+        "company_sentiment": {
+            "positive": 0.21531328633621646,
+            "negative": 0.6078451330055638,
+            "neutral": 0.17684159788768739,
+            "positive_count": 10,
+            "negative_count": 31,
+            "neutral_count": 7
+        },
+        "company_trend": {
+            "bullish": 70.83333333333334,
+            "bearish": 8.333333333333332,
+            "neutral": 20.833333333333336,
+            "bullish_count": 34,
+            "bearish_count": 4,
+            "neutral_count": 10
+        }
+    },
+    "NTPC Limited": {
+        "articles_count": 28,
+        "company_sentiment": {
+            "positive": 0.28026033726720406,
+            "negative": 0.4978008714637586,
+            "neutral": 0.22193878829213126,
+            "positive_count": 9,
+            "negative_count": 15,
+            "neutral_count": 4
+        },
+        "company_trend": {
+            "bullish": 64.28571428571429,
+            "bearish": 0.0,
+            "neutral": 35.714285714285715,
+            "bullish_count": 18,
+            "bearish_count": 0,
+            "neutral_count": 10
+        }
+    },
+    "Coal India Limited": {
+        "articles_count": 16,
+        "company_sentiment": {
+            "positive": 0.28597311512567103,
+            "negative": 0.526067767990753,
+            "neutral": 0.18795913475332782,
+            "positive_count": 4,
+            "negative_count": 10,
+            "neutral_count": 2
+        },
+        "company_trend": {
+            "bullish": 50.0,
+            "bearish": 0.0,
+            "neutral": 50.0,
+            "bullish_count": 8,
+            "bearish_count": 0,
+            "neutral_count": 8
+        }
+    },
+    "Hindalco Industries Limited": {
+        "articles_count": 12,
+        "company_sentiment": {
+            "positive": 0.17840941273607314,
+            "negative": 0.577307135798037,
+            "neutral": 0.2442834546479086,
+            "positive_count": 2,
+            "negative_count": 7,
+            "neutral_count": 3
+        },
+        "company_trend": {
+            "bullish": 75.0,
+            "bearish": 0.0,
+            "neutral": 25.0,
+            "bullish_count": 9,
+            "bearish_count": 0,
+            "neutral_count": 3
+        }
+    },
+    "JSW Steel Limited": {
+        "articles_count": 15,
+        "company_sentiment": {
+            "positive": 0.41424236726015806,
+            "negative": 0.4085150269170602,
+            "neutral": 0.17724259061117967,
+            "positive_count": 6,
+            "negative_count": 6,
+            "neutral_count": 3
+        },
+        "company_trend": {
+            "bullish": 33.33333333333333,
+            "bearish": 26.666666666666668,
+            "neutral": 40.0,
+            "bullish_count": 5,
+            "bearish_count": 4,
+            "neutral_count": 6
+        }
+    },
+    "TATA Steel Limited": {
+        "articles_count": 30,
+        "company_sentiment": {
+            "positive": 0.4395908964176973,
+            "negative": 0.4960644831104825,
+            "neutral": 0.06434462430576483,
+            "positive_count": 13,
+            "negative_count": 17,
+            "neutral_count": 0
+        },
+        "company_trend": {
+            "bullish": 43.333333333333336,
+            "bearish": 20.0,
+            "neutral": 36.666666666666664,
+            "bullish_count": 13,
+            "bearish_count": 6,
+            "neutral_count": 11
+        }
+    },
+    "Asian Paints Limited": {
+        "articles_count": 16,
+        "company_sentiment": {
+            "positive": 0.649596914765425,
+            "negative": 0.16828187918872572,
+            "neutral": 0.18212122295517474,
+            "positive_count": 11,
+            "negative_count": 2,
+            "neutral_count": 3
+        },
+        "company_trend": {
+            "bullish": 18.75,
+            "bearish": 25.0,
+            "neutral": 56.25,
+            "bullish_count": 3,
+            "bearish_count": 4,
+            "neutral_count": 9
+        }
+    },
+    "Divi's Laboratories Limited": {
+        "articles_count": 5,
+        "company_sentiment": {
+            "positive": 0.20572580471634866,
+            "negative": 0.598331349529326,
+            "neutral": 0.19594283439218999,
+            "positive_count": 1,
+            "negative_count": 3,
+            "neutral_count": 1
+        },
+        "company_trend": {
+            "bullish": 60.0,
+            "bearish": 20.0,
+            "neutral": 20.0,
+            "bullish_count": 3,
+            "bearish_count": 1,
+            "neutral_count": 1
+        }
+    },
+    "Britannia Industries Limited": {
+        "articles_count": 10,
+        "company_sentiment": {
+            "positive": 0.4078167976811528,
+            "negative": 0.47239873856306075,
+            "neutral": 0.11978446412831545,
+            "positive_count": 4,
+            "negative_count": 5,
+            "neutral_count": 1
+        },
+        "company_trend": {
+            "bullish": 50.0,
+            "bearish": 20.0,
+            "neutral": 30.0,
+            "bullish_count": 5,
+            "bearish_count": 2,
+            "neutral_count": 3
+        }
+    },
+    "Bharat Petroleum Corporation Limited": {
+        "articles_count": 12,
+        "company_sentiment": {
+            "positive": 0.5214241519570351,
+            "negative": 0.3826934973864506,
+            "neutral": 0.09588233420314889,
+            "positive_count": 6,
+            "negative_count": 5,
+            "neutral_count": 1
+        },
+        "company_trend": {
+            "bullish": 25.0,
+            "bearish": 41.66666666666667,
+            "neutral": 33.33333333333333,
+            "bullish_count": 3,
+            "bearish_count": 5,
+            "neutral_count": 4
+        }
+    },
+    "HCL Technologies Limited": {
+        "articles_count": 35,
+        "company_sentiment": {
+            "positive": 0.33979655236804057,
+            "negative": 0.5201193231823189,
+            "neutral": 0.14008413191352573,
+            "positive_count": 13,
+            "negative_count": 18,
+            "neutral_count": 4
+        },
+        "company_trend": {
+            "bullish": 62.857142857142854,
+            "bearish": 14.285714285714285,
+            "neutral": 22.857142857142858,
+            "bullish_count": 22,
+            "bearish_count": 5,
+            "neutral_count": 8
+        }
+    },
+    "TATA CONSUMER PRODUCTS LIMITED": {
+        "articles_count": 10,
+        "company_sentiment": {
+            "positive": 0.29106940058991315,
+            "negative": 0.5103521047160029,
+            "neutral": 0.19857851471751928,
+            "positive_count": 3,
+            "negative_count": 5,
+            "neutral_count": 2
+        },
+        "company_trend": {
+            "bullish": 50.0,
+            "bearish": 30.0,
+            "neutral": 20.0,
+            "bullish_count": 5,
+            "bearish_count": 3,
+            "neutral_count": 2
+        }
+    },
+    "Power Grid Corporation of India Limited": {
+        "articles_count": 15,
+        "company_sentiment": {
+            "positive": 0.48949743105719484,
+            "negative": 0.36608903103818496,
+            "neutral": 0.14441352530072132,
+            "positive_count": 8,
+            "negative_count": 6,
+            "neutral_count": 1
+        },
+        "company_trend": {
+            "bullish": 33.33333333333333,
+            "bearish": 20.0,
+            "neutral": 46.666666666666664,
+            "bullish_count": 5,
+            "bearish_count": 3,
+            "neutral_count": 7
+        }
+    },
+    "Eicher Motors Limited": {
+        "articles_count": 10,
+        "company_sentiment": {
+            "positive": 0.1237453761510551,
+            "negative": 0.8052611066028476,
+            "neutral": 0.07099352665245533,
+            "positive_count": 1,
+            "negative_count": 9,
+            "neutral_count": 0
+        },
+        "company_trend": {
+            "bullish": 80.0,
+            "bearish": 20.0,
+            "neutral": 0.0,
+            "bullish_count": 8,
+            "bearish_count": 2,
+            "neutral_count": 0
+        }
+    },
+    "Titan Company Limited": {
+        "articles_count": 10,
+        "company_sentiment": {
+            "positive": 0.16930669122375547,
+            "negative": 0.5944211090914905,
+            "neutral": 0.2362721838057041,
+            "positive_count": 2,
+            "negative_count": 6,
+            "neutral_count": 2
+        },
+        "company_trend": {
+            "bullish": 50.0,
+            "bearish": 10.0,
+            "neutral": 40.0,
+            "bullish_count": 5,
+            "bearish_count": 1,
+            "neutral_count": 4
+        }
+    },
+    "Adani Ports and Special Economic Zone Limited": {
+        "articles_count": 46,
+        "company_sentiment": {
+            "positive": 0.0376931034716899,
+            "negative": 0.8665807724970839,
+            "neutral": 0.09572612785774728,
+            "positive_count": 1,
+            "negative_count": 42,
+            "neutral_count": 3
+        },
+        "company_trend": {
+            "bullish": 93.47826086956522,
+            "bearish": 0.0,
+            "neutral": 6.521739130434782,
+            "bullish_count": 43,
+            "bearish_count": 0,
+            "neutral_count": 3
+        }
+    },
+    "Dr. Reddys Laboratories Ltd.": {
+        "articles_count": 24,
+        "company_sentiment": {
+            "positive": 0.25388466568741325,
+            "negative": 0.5867786046195155,
+            "neutral": 0.15933672532749674,
+            "positive_count": 6,
+            "negative_count": 15,
+            "neutral_count": 3
+        },
+        "company_trend": {
+            "bullish": 66.66666666666666,
+            "bearish": 8.333333333333332,
+            "neutral": 25.0,
+            "bullish_count": 16,
+            "bearish_count": 2,
+            "neutral_count": 6
+        }
+    },
+    "Shriram Finance Company Ltd.": {
+        "articles_count": 9,
+        "company_sentiment": {
+            "positive": 0.13493046826786464,
+            "negative": 0.5490804738882515,
+            "neutral": 0.31598905763692325,
+            "positive_count": 1,
+            "negative_count": 5,
+            "neutral_count": 3
+        },
+        "company_trend": {
+            "bullish": 77.77777777777779,
+            "bearish": 11.11111111111111,
+            "neutral": 11.11111111111111,
+            "bullish_count": 7,
+            "bearish_count": 1,
+            "neutral_count": 1
+        }
+    },
+    "Oil & Natural Gas Corporation Ltd.": {
+        "articles_count": 6,
+        "company_sentiment": {
+            "positive": 0.3549310494369517,
+            "negative": 0.4198820545958976,
+            "neutral": 0.22518689868350825,
+            "positive_count": 2,
+            "negative_count": 3,
+            "neutral_count": 1
+        },
+        "company_trend": {
+            "bullish": 50.0,
+            "bearish": 0.0,
+            "neutral": 50.0,
+            "bullish_count": 3,
+            "bearish_count": 0,
+            "neutral_count": 3
+        }
+    }
+}
