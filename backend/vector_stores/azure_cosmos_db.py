@@ -257,13 +257,19 @@ class AzureCosmosVectorStore:
             self._container.query_items(query=query, enable_cross_partition_query=True)
         )
         unique = set()
+        col_name = column.split(".")[-1]
         for item in items:
             if len(item):
-                if isinstance(item[column], list):
-                    unique.update(item[column])
+                if isinstance(item[col_name], list):
+                    unique.update(item[col_name])
+                elif isinstance(item[col_name], dict):
+                    unique.update(item[col_name].keys())
                 else:
-                    unique.add(item[column])
-        unique.remove("null")
+                    unique.add(item[col_name])
+        if "null" in unique:
+            unique.remove("null")
+        if None in unique:
+            unique.remove(None)
         return list(unique)
 
     def vector_search(
