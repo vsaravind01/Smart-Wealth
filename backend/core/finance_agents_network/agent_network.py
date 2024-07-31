@@ -1,31 +1,18 @@
 import os
 import operator
-from typing import Annotated, Sequence, TypedDict, Dict, List
+from typing import Annotated, Sequence, TypedDict
 import functools
 from pydantic import BaseModel
 from contextlib import contextmanager
 from typing import Literal
 
-from langchain_core.messages import (
-    BaseMessage,
-    HumanMessage,
-    ToolMessage,
-)
-
-from langgraph.prebuilt import ToolNode
-
 from langgraph.channels.context import Context
-from langgraph.checkpoint.aiosqlite import AsyncSqliteSaver
-from langchain_core.messages import BaseMessage, HumanMessage, AIMessage
+from langchain_core.messages import BaseMessage, AIMessage, ToolMessage
 from langgraph.graph import END, StateGraph, START
-from langgraph.graph import StateGraph, END
 from langchain_openai import AzureChatOpenAI
 from langchain.output_parsers.openai_functions import JsonOutputFunctionsParser
+from langgraph.prebuilt import ToolNode
 
-from backend.core.finance_agents_network.agents.investor_agent import InvestorAgent
-from backend.core.finance_agents_network.agents.market_analyzer_agent import (
-    MarketAnalyzerAgent,
-)
 from backend.core.finance_agents_network.agents.principal_agent import PrincipalAgent
 
 OPENAI_CHAT_MODEL_DEPLOYMENT = os.environ["OPENAI_CHAT_MODEL_DEPLOYMENT"]
@@ -88,10 +75,6 @@ class AgentsNetwork:
             "next": name,
         }
 
-    # def agent_node(self, state, agent, name):
-    #     result = agent.invoke(state)
-    #     return {"messages": [HumanMessage(content=result["output"], name=name)]}
-
     def create_chain(self, prompt, function_def: dict):
         agent_chain = (
             prompt
@@ -104,17 +87,9 @@ class AgentsNetwork:
     def router(
         state,
     ) -> Literal["call_tool", "__end__", "continue", "MarketAnalyzerAgent"]:
-        print("Route")
-        print(state)
-        print("---->", state.get("next"), state.get("context").market_data)
+        print("Router", state)
         messages = state["messages"]
         last_message = messages[-1]
-        if (
-            state.get("next") == "InvestorAgent"
-            and state.get("context").market_data == []
-        ):
-            print("Market Analyzer")
-            return "MarketAnalyzerAgent"
         if last_message.tool_calls:
             return "call_tool"
         if "FINAL ANSWER" in last_message.content:
@@ -151,7 +126,6 @@ class AgentsNetwork:
                 "continue": "PrincipalAgent",
                 "call_tool": "call_tool",
                 "__end__": END,
-                "MarketAnalyzerAgent": "MarketAnalyzerAgent",
             },
         )
         self.graph.add_conditional_edges(
@@ -178,27 +152,3 @@ class AgentsNetwork:
 
         agent_network = self.graph.compile()
         return agent_network
-
-
-# network = AgentsNetwork()
-# network.add_agent("MarketAnalyzerAgent", MarketAnalyzerAgent, "Market Analyzer Prompt")
-# network.add_agent(
-#     "InvestorAgent",
-#     InvestorAgent,
-#     "You are the InvestorAgent, responsible for allocating the user's principal amount into Equities, Mutual Funds, and Gold using the calculate_asset_allocation tool; based on the results, call allocate_mutual_funds for mutual funds and allocate_stocks for equities, ensuring to consider user preferences and risk profiles.",
-# )
-# graph = network.create_agent_network()
-
-
-# config = {"recursion_limit": 2}
-# for s in graph.stream(
-#     {
-#         "messages": [
-#             HumanMessage(content="Allocate 10000 Rs. in equity and mutual funds")
-#         ]
-#     },
-#     config=config,
-# ):
-#     if "__end__" not in s:
-#         print(s)
-#         print("----")

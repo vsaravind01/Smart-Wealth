@@ -15,8 +15,10 @@ class PrincipalAgent(Agent):
             " respond with the worker to act next. Each worker will perform a"
             " task and respond with their results and status. When finished,"
             " respond with FINISH."
-            " MarketAnalyzerAgent is responsible for fetching company related news, expert advice about a company and also fetches market metrics"
-            " InvestorAgent is responsible for allocating the users pricipal amount into Equity, Mutual Funds and Gold."
+            " MarketAnalyzerAgent: Responsible for fetching news, expert advice and market metrics related to a company."
+            " InvestorAgent: Responsible for allocating the users pricipal amount into Equity, Mutual Funds and Gold."
+            " PersonalFinanceAgent: Responsible for providing advice on the user's financial situation with appropriate"
+            " loan and insurance options provided only by Bank of Baroda."
         ).format(members=self.members)
 
         self.function_def = {

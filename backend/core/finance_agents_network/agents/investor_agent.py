@@ -1,12 +1,14 @@
 import os
 from enum import Enum
 import json
+from collections import defaultdict
 
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_core.tools import tool
 from langchain_openai import AzureChatOpenAI
 
 from backend.core.finance_agents_network.agent import Agent
+from backend.document_loader.nse_document_loader import NseIndexLoader
 from backend.vector_stores.azure_cosmos_db import AzureCosmosVectorStore
 
 OPENAI_CHAT_MODEL_DEPLOYMENT = os.environ["OPENAI_CHAT_MODEL_DEPLOYMENT"]
@@ -21,7 +23,7 @@ class InvestmentPeriod(Enum):
 
 class RiskAppetite(Enum):
     LOW = "low"
-    MEDIUM = "medium"
+    MODERATE = "moderate"
     HIGH = "high"
 
 
@@ -29,20 +31,39 @@ class InvestorAgent(Agent):
     funds = {
         InvestmentPeriod.SHORT_TERM: {
             RiskAppetite.LOW: "debt mutual fund",
-            RiskAppetite.MEDIUM: "liquid fund",
+            RiskAppetite.MODERATE: "liquid fund",
             RiskAppetite.HIGH: "hybrid fund",
         },
         InvestmentPeriod.MID_TERM: {
             RiskAppetite.LOW: "balanced large-cap mutual fund",
-            RiskAppetite.MEDIUM: "balanced large-cap mutual fund",
+            RiskAppetite.MODERATE: "balanced large-cap mutual fund",
             RiskAppetite.HIGH: "multi-cap mutual funds",
         },
         InvestmentPeriod.LONG_TERM: {
             RiskAppetite.LOW: "large-cap mutual funds",
-            RiskAppetite.MEDIUM: "mid-cap mutual funds",
+            RiskAppetite.MODERATE: "mid-cap mutual funds",
             RiskAppetite.HIGH: "small-cap mutual funds",
         },
     }
+
+    stock_news_attributes = [
+        "Acquisition",
+        "New product launches",
+        "New partnerships or collaborations",
+        "Financial results",
+    ]
+    expert_news_attributes = [
+        "Acquisition",
+        "New product launches",
+        "New partnerships or collaborations",
+        "Financial results",
+    ]
+    stock_news_vector_store = AzureCosmosVectorStore(
+        database_name="smart-wealth-main-db", container_name="stock-news"
+    )
+    expert_news_vector_store = AzureCosmosVectorStore(
+        database_name="smart-wealth-main-db", container_name="expert-news"
+    )
 
     def __init__(self, name: str, system_prompt: str) -> None:
         tools = [
@@ -53,6 +74,79 @@ class InvestorAgent(Agent):
         super().__init__(name, tools, system_prompt)
 
     @staticmethod
+    def get_search_queries(company: str, search_attributes: list) -> list:
+        return [
+            f"Documents having news related to {attribute} of {company}"
+            for attribute in search_attributes
+        ]
+
+    @staticmethod
+    def get_company_analysis(company_list: list) -> list:
+        """
+        Get news summaries and expert analysis for the provided list of companies.
+        """
+        combined_analysis = defaultdict(
+            lambda: {
+                "sector": set(),
+                "news_summary": set(),
+                "segments": set(),
+                "analysis_summary": set(),
+            }
+        )
+
+        for company in company_list:
+            search_queries = InvestorAgent.get_search_queries(
+                company, InvestorAgent.stock_news_attributes
+            )
+
+            for query in search_queries:
+                print("News query----->>", query)
+                # Get news summaries
+                search_results_news = (
+                    InvestorAgent.stock_news_vector_store.vector_search(
+                        query, top_k=3, threshold=0.3, with_embeddings=False
+                    )
+                )
+                for res in search_results_news:
+                    combined_analysis[company]["sector"].update(
+                        res.document.document_meta.sector
+                    )
+                    combined_analysis[company]["news_summary"].add(
+                        res.document.document_meta.summary
+                    )
+
+            search_queries = InvestorAgent.get_search_queries(
+                company, InvestorAgent.stock_news_attributes
+            )
+            for query in search_queries:
+                print("Expert Analysis query----->>", query)
+                # Get expert analysis
+                search_results_expert = (
+                    InvestorAgent.expert_news_vector_store.vector_search(
+                        query, top_k=3, threshold=0.3, with_embeddings=False
+                    )
+                )
+                for res in search_results_expert:
+                    combined_analysis[company]["segments"].update(
+                        res.document.document_meta.segments
+                    )
+                    combined_analysis[company]["analysis_summary"].add(
+                        res.document.document_meta.summary
+                    )
+
+        result = [
+            {
+                "company_name": company,
+                "sector": list(details["sector"]),
+                "news_summary": list(details["news_summary"]),
+                "segments": list(details["segments"]),
+                "analysis_summary": list(details["analysis_summary"]),
+            }
+            for company, details in combined_analysis.items()
+        ]
+        return result
+
+    @staticmethod
     @tool("asset_allocation", return_direct=False)
     def calculate_asset_allocation(age: int) -> dict:
         """
@@ -60,19 +154,31 @@ class InvestorAgent(Agent):
         """
         rounded_age = ((age + 9) // 10) * 10
         equity = 100 - rounded_age
-        mutual_funds = 0.65 * equity
-        gold = equity - mutual_funds
+        mutual_funds = 0.65 * rounded_age
+        gold = rounded_age - mutual_funds
 
+        print(
+            "Asset Allocation: ",
+            {"equity": equity, "mutual_funds": mutual_funds, "gold": gold},
+        )
         return {"equity": equity, "mutual_funds": mutual_funds, "gold": gold}
 
     @staticmethod
     @tool("allocate_mutual_funds", return_direct=False)
-    def allocate_mutual_funds(mutual_fund_split,suggested_companies,desired_sector) -> dict:
+    def allocate_mutual_funds(top_companies) -> dict:
         """
         Provides guidance on how to allocate a portion of the portfolio across various equity funds.
         """
+        top_companies_ticker = []
+        nse_loader = NseIndexLoader()
+        for company_name in top_companies:
+            top_companies_ticker.append(
+                nse_loader.get_ticker_from_company_name(company_name)
+            )
+
+        print("Mutual Funds Allocation", top_companies_ticker)
         investment_period = InvestmentPeriod.LONG_TERM
-        risk_appetite = RiskAppetite.MEDIUM
+        risk_appetite = RiskAppetite.MODERATE
         if isinstance(investment_period, InvestmentPeriod) and isinstance(
             risk_appetite, RiskAppetite
         ):
@@ -80,26 +186,12 @@ class InvestorAgent(Agent):
             mutual_fund_vector_store = AzureCosmosVectorStore(
                 database_name="smart-wealth-main-db", container_name="mutual-fund"
             )
-            # response = mutual_fund_vector_store.filter_documents(
-            #     filters={
-            #         "document_meta.minimum_investment_amount": {
-            #             "lt": mutual_fund_split
-            #         },
-            #         "document_meta.scheme_riskometer": {"like": fund_type},
-            #         "document_meta.tickers": {"in": ["suggested_companies"]},
-            #         "document_meta.sectoral_composition": {"in": ["desired_sector"]},
-            #     }
-            # )
             filter = {
-                "AND": {
-                    "document_meta.sectoral_composition_list": desired_sector,
-                    "document_meta.scheme_riskometer": {
-                        "ilike":fund_type
-                    },
-                    "document_meta.tickers":suggested_companies
-                }
+                # "document_meta.sectoral_composition_list": desired_sector,
+                "document_meta.scheme_riskometer": {"ilike": risk_appetite.value},
+                "document_meta.tickers": top_companies_ticker,
             }
-            response=mutual_fund_vector_store.filter_documents(filters=filter)
+            response = mutual_fund_vector_store.filter_documents(filters=filter)
 
             fund_json_list = []
             for document in response:
@@ -108,8 +200,9 @@ class InvestorAgent(Agent):
                     {
                         "fund_name": meta.fund_name,
                         "investment_objective": meta.investment_objective,
+                        "tickers": meta.tickers,
                         "scheme_riskometer": meta.scheme_riskometer,
-                        "portfolio": meta.portfolio.v2,
+                        "portfolio": meta.portfolio,
                         "minimum_investment_amount": meta.minimum_investment_amount,
                     }
                 )
@@ -117,18 +210,19 @@ class InvestorAgent(Agent):
 
     @staticmethod
     @tool("allocate_stocks", return_direct=False)
-    def allocate_stocks(suggested_companies: list) -> dict:
-        """
-        Provides guidance on how to allocate a portion of the portfolio across various mutual funds.
-        """
-        personal_details = {
-            "age": 20,
-            "risk_tolerance": "medium",
-            "investment_period": 20,
-        }
+    def allocate_stocks(age, risk_tolerance, investment_period, top_companies) -> dict:
         """
         Allocates the investment balance among selected stocks based on their expected returns and user Account balance
         """
+        print(
+            "Stock allocation: ", age, risk_tolerance, investment_period, top_companies
+        )
+        personal_details = {
+            "age": age,
+            "risk_tolerance": risk_tolerance,
+            "investment_period": investment_period,
+        }
+        top_companies_summary = InvestorAgent.get_company_analysis(top_companies)
 
         prompt = f"""You are a financial advisor, and you have a list of well-performing companies filtered by a clustering algorithm. Each company comes with relevant financial news such as acquisitions, new product launches, new partnerships or collaborations, and financial results. Additionally, important financial ratios and data for each company are provided.
         You also have personal details of an investor, including their bank account balance, age, the risk they are willing to take, and whether they prefer short-term, mid-term, or long-term investing.
@@ -165,7 +259,7 @@ class InvestorAgent(Agent):
         )
         messages = [
             SystemMessage(content=prompt),
-            HumanMessage(content=str(suggested_companies)),
+            HumanMessage(content=str(top_companies_summary)),
         ]
         response = llm_instance.invoke(messages)
         return response.content
