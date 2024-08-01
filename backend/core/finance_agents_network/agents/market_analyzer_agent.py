@@ -1,5 +1,6 @@
 import os
 from collections import defaultdict
+from functools import cache
 
 from langchain_core.tools import tool
 
@@ -30,6 +31,7 @@ class MarketAnalyzerAgent(Agent):
         super().__init__(name, tools, system_prompt)
 
     @staticmethod
+    @cache
     def get_search_queries(company: str, search_attributes: list) -> list:
         return [
             f"Documents having news related to {attribute} of {company}"

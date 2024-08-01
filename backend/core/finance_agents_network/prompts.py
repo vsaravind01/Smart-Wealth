@@ -21,6 +21,9 @@ market_analyzer_prompt = (
     " analysis for each company."
     f" Top Companies = {company_names}."
     " Use Top Companies as input parameters only if user does not provide any specific company in the query."
+    " Use get_news_articles and get_expert_analysis tools to get the news articles and expert analysis."
+    " After you finish, you should pass the conversation to the supervisor."
+    " You should always reply with the context of responding to the user's query."
 )
 
 investor_prompt = (
@@ -31,6 +34,9 @@ investor_prompt = (
     " Use the data from get_company_analysis to know about companies."
     f" Top Companies = {top_companies}."
     " Whenever you're recommending give a short summary stating the reason for suggesting."
+    " After you finish, you should pass the conversation to the supervisor."
+    " Use get_news_articles and get_expert_analysis tools to get the news articles and expert analysis."
+    " You should always reply with the context of responding to the user's query."
 )
 
 personal_finance_prompt = (
@@ -40,5 +46,8 @@ personal_finance_prompt = (
     " If the user is buying a vehicle or a house, provide the best loan options."
     " If the user is under 25 years old, provide the best insurance options."
     " If the user explicitly asks for a loan scheme, provide the loan options relevant to the user's query."
+    " Use search_loan_documents and search_insurance_documents tools to get the loan and insurance options."
     " If you are unable to provide advice, then you can pass it to the supervisor."
+    " After you finish, you should pass the conversation to the supervisor."
+    " You should always reply with the context of responding to the user's query."
 )

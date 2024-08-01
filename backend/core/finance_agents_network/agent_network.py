@@ -6,6 +6,10 @@ from pydantic import BaseModel
 from contextlib import contextmanager
 from typing import Literal
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 from langgraph.channels.context import Context
 from langchain_core.messages import BaseMessage, AIMessage, ToolMessage
 from langgraph.graph import END, StateGraph, START
@@ -14,6 +18,18 @@ from langchain.output_parsers.openai_functions import JsonOutputFunctionsParser
 from langgraph.prebuilt import ToolNode
 
 from backend.core.finance_agents_network.agents.principal_agent import PrincipalAgent
+from backend.core.finance_agents_network.agents.investor_agent import InvestorAgent
+from backend.core.finance_agents_network.agents.personal_finance_agent import (
+    PersonalFinanceAgent,
+)
+from backend.core.finance_agents_network.agents.market_analyzer_agent import (
+    MarketAnalyzerAgent,
+)
+from backend.core.finance_agents_network.prompts import (
+    market_analyzer_prompt,
+    investor_prompt,
+    personal_finance_prompt,
+)
 
 OPENAI_CHAT_MODEL_DEPLOYMENT = os.environ["OPENAI_CHAT_MODEL_DEPLOYMENT"]
 OPENAI_API_VERSION = os.environ["OPENAI_API_VERSION"]
@@ -94,7 +110,7 @@ class AgentsNetwork:
             return "call_tool"
         return "continue"
 
-    def create_agent_network(self) -> None:
+    def create_agent_network(self):
         self.graph = StateGraph(AgentState)
 
         self.tools = []
@@ -146,3 +162,25 @@ class AgentsNetwork:
 
         agent_network = self.graph.compile()
         return agent_network
+
+
+# from langchain_core.messages import HumanMessage
+#
+# agent = AgentsNetwork()
+# agent.add_agent("MarketAnalyzerAgent", MarketAnalyzerAgent, market_analyzer_prompt)
+# agent.add_agent("InvestorAgent", InvestorAgent, investor_prompt)
+# agent.add_agent("PersonalFinanceAgent", PersonalFinanceAgent, personal_finance_prompt)
+# graph = agent.create_agent_network()
+# events = graph.stream(
+#     {
+#         "messages": [
+#             HumanMessage(
+#                 content="My age is 27. I want to get a home loan in 5 years. Im ready to take moderate risk. I have a principal of Rs. 50000. Im ready to invest for a long term. How can i allocate my money. Allocate my assets."
+#             )
+#         ],
+#     },
+#     {"recursion_limit": 20},
+# )
+# for s in events:
+#     print(s)
+#     print("----")

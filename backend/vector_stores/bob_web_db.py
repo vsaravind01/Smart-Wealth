@@ -48,7 +48,6 @@ class BobWebVectorStore(AzureCosmosVectorStore):
             top_k=top_k,
             threshold=threshold,
             with_embeddings=with_embeddings,
-            filters=filters,
         )
 
     def filter_documents(
