@@ -18,12 +18,9 @@ async def chat(messages: dict[str, Any]):
 
     for r in stream_graph(messages):
         for key, value in r.items():
-            print("\n\n")
-            print("-----------------")
             if "messages" in value:
                 for m in value["messages"]:
                     if isinstance(m, AIMessage):
-                        print(m.content)
                         response.append({"sender": "bot", "text": m.content})
 
     final_response = {
