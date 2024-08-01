@@ -16,9 +16,11 @@ class PrincipalAgent(Agent):
             " task and respond with their results and status. When finished,"
             " respond with FINISH."
             " MarketAnalyzerAgent: Responsible for fetching news, expert advice and market metrics related to a company."
-            " InvestorAgent: Responsible for allocating the users pricipal amount into Equity, Mutual Funds and Gold."
-            " PersonalFinanceAgent: Responsible for providing advice on the user's financial situation with appropriate"
-            " loan and insurance options provided only by Bank of Baroda."
+            " InvestorAgent: Responsible for allocating the users principal amount into Equity, Mutual Funds and Gold."
+            " PersonalFinanceAgent: Responsible for providing with appropriate loan and insurance options. You should always"
+            " ask PersonalFinanceAgent if the user is above 25 years old or he is buying a vehicle or a house."
+            " END the conversation when all the workers have finished their tasks. Do not give any worker the same task twice."
+            " Whenever the user asks for a financial advice, you should pass the conversation to InvestorAgent."
         ).format(members=self.members)
 
         self.function_def = {

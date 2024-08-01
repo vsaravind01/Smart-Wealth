@@ -4,6 +4,7 @@ import os
 import time
 
 import logging
+from functools import cache
 from uuid import uuid4
 from typing import Any, Callable, Generator, Literal, Optional, Sequence
 
@@ -272,13 +273,13 @@ class AzureCosmosVectorStore:
             unique.remove(None)
         return list(unique)
 
+    @cache
     def vector_search(
         self,
         query: str,
         top_k: int = 10,
         threshold: Optional[float] = 0.0,
         with_embeddings: Optional[bool] = False,
-        filters: Optional[dict[Literal["AND", "OR"], Any]] = None,
         columns: Sequence[str] = None,
     ) -> list[ResponseDocument]:
         """Search for similar documents based on the query
@@ -324,21 +325,15 @@ class AzureCosmosVectorStore:
             columns = config.columns
         columns = [f"c.{column}" for column in columns]
 
-        if filters is None:
-            filters = {}
-
-        filter_string = build_where_clause(filters)
-
         if with_embeddings:
             query = (
                 "SELECT TOP {} {}, VectorDistance(c.{}, {}) AS "
-                "{} FROM c {} ORDER BY VectorDistance(c.{}, {})".format(
+                "{} FROM c ORDER BY VectorDistance(c.{}, {})".format(
                     top_k,
                     ", ".join(columns),
                     self._embedding_key,
                     embeddings,
                     self._similarity_key,
-                    filter_string,
                     self._embedding_key,
                     embeddings,
                 )
@@ -346,13 +341,12 @@ class AzureCosmosVectorStore:
         else:
             query = (
                 "SELECT TOP {} {}, VectorDistance(c.{}, {}) AS "
-                "{} FROM c {} ORDER BY VectorDistance(c.{}, {})".format(
+                "{} FROM c ORDER BY VectorDistance(c.{}, {})".format(
                     top_k,
                     ", ".join(columns),
                     self._embedding_key,
                     embeddings,
                     self._similarity_key,
-                    filter_string,
                     self._embedding_key,
                     embeddings,
                 )

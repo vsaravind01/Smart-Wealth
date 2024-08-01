@@ -14,8 +14,10 @@ class MutualFundDocumentMeta(BaseDocumentMeta):
     fund_manager: dict[str, Any]
 
     key_statistics: Optional[dict[str, Any]] = None
+    tickers: Optional[list[str]] = None
     market_capitalization: Optional[dict[str, Any]] = None
-    sectoral_composition: Optional[dict[str, Any]]
+    sectoral_composition: Optional[dict[str, Any]] = None
+    sectoral_composition_list: Optional[list[str]] = None
     composition_by_assets: Optional[dict[str, Any]] = None
     credit_quality_profile: Optional[dict[str, Any]] = None
 
