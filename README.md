@@ -26,6 +26,10 @@ Smart Wealth is your AI-powered financial advisor, providing personalized invest
 
 <img src="./mock_ups/agents.svg" width="800px"/>
 
+## Agent Architecture
+
+<img src="./mock_ups/smart-wealth-arch.svg" width="1200px"/>
+
 ## Features
 
 - **Personalized Investment Strategies**: Smart Wealth uses machine learning algorithms to analyze your financial situation and risk tolerance, and provides personalized investment strategies to help you achieve your goals.
