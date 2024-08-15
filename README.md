@@ -18,17 +18,13 @@ Smart Wealth is your AI-powered financial advisor, providing personalized invest
 <img src="./mock_ups/6.svg" width="300px"/>
 </span>
 
+## Agent Architecture
+
+![smart-wealth-arch](https://github.com/user-attachments/assets/bd139a4a-63c0-48aa-a8c2-a7a08f2e24a2)
+
 ## Architecture
 
 <img src="./mock_ups/arch.svg" width="800px"/>
-
-## AI Agent Model
-
-<img src="./mock_ups/agents.svg" width="800px"/>
-
-## Agent Architecture
-
-<img src="./mock_ups/smart-wealth-arch.svg" width="1200px"/>
 
 ## Features
 
@@ -49,4 +45,5 @@ Smart Wealth is your AI-powered financial advisor, providing personalized invest
     - Enhances efficiency and enables faster computations.
 
 - **Reinforcement Learning Agent**:
-    - Enhances efficiency and enables faster computations.
+    - Optimizes investment strategies over time by learning from market conditions using Deep Reinforcement Learning algorithms.
+    - This development builds on a previous project - [https://github.com/vsaravind01/RL-Portfolio-Allocator](https://github.com/vsaravind01/RL-Portfolio-Allocator)
