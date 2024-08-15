@@ -22,7 +22,7 @@ Smart Wealth is your AI-powered financial advisor, providing personalized invest
 
 ![smart-wealth-arch](https://github.com/user-attachments/assets/bd139a4a-63c0-48aa-a8c2-a7a08f2e24a2)
 
-## Architecture
+## Application Architecture
 
 <img src="./mock_ups/arch.svg" width="800px"/>
 
