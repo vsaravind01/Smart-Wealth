@@ -2,7 +2,7 @@
 
 ## Description
 
-Smart Wealth is your AI-powered financial advisor, providing personalized investment strategies, real-time market insights, and tailored financial planning to help you achieve your goals.
+Smart Wealth is your AI-powered financial advisor, providing personalized investment strategies, real-time market insights, and tailored financial planning to help you achieve your goals. This application was developed for the final round of [BoB Hackathon](https://bobhackathon.com/) hosted by Microsoft Azure and Bank of Baroda.
 
 ## Mockups
 
